@@ -52,6 +52,7 @@ export class AuthService {
         const updatedUser = {...response.account, Id};
         this.localStorageRefService.setData(StorageKeysEnum.USER, updatedUser);
         this.updateLoginState();
+        this.router.navigate(['/']).then();
       });
     });
   }
