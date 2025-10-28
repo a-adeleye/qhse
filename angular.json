@@ -18,6 +18,7 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -25,7 +26,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "@angular/material/prebuilt-themes/azure-blue.css"
             ]
           },
           "configurations": {
@@ -42,7 +44,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
@@ -75,6 +78,7 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
@@ -82,7 +86,8 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss",
+              "@angular/material/prebuilt-themes/azure-blue.css"
             ]
           }
         }

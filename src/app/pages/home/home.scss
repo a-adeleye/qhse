@@ -1,0 +1,28 @@
+:host {
+  height: 100%;
+}
+
+.top {
+  padding: 3rem;
+  gap: 1.5rem;
+
+  .logo {
+    height: 4rem;
+  }
+
+  .title {
+    font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;
+    color: var(--primary-color);
+  }
+}
+
+.bottom {
+  background-image: url("/images/home-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.note {
+  font-size: .7rem;
+}

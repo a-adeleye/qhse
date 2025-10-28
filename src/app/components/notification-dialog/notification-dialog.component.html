@@ -1,0 +1,19 @@
+<div class="p-4 rounded bg-glass">
+  <p class="fw-bold">🔔 Notifications are blocked.</p>
+
+  @if (platform == 'ios') {
+    <p>Tap <strong>Allow</strong> when the “<strong>Allow Notifications?</strong>” prompt appears.</p>
+    <p>If you’ve denied, open <strong>Settings → Notifications → Corporate Image</strong> to re-enable, or uninstall &
+      re-add the app to re-trigger the prompt.</p>
+  }
+
+  @if (platform == 'android') {
+    <p>Tap <strong>Allow</strong> when you see the “<strong>Show notifications?</strong>” dialog.</p>
+    <p>If you’ve denied, go to <strong>Settings → Apps & notifications → See all apps → Corporate Image →
+      Notifications</strong> and enable “Show notifications”, or uninstall & re-add the app.</p>
+  }
+
+  <div class="d-flex gap-4 justify-content-end">
+    <button mat-button (click)="close()">Close</button>
+  </div>
+</div>
