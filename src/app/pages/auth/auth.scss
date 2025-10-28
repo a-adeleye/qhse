@@ -1,68 +1,24 @@
 .wrapper {
-  background-color: rgba(255, 255, 255, .75);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 3rem;
 }
 
-.top {
-  padding: 6rem 3rem 2rem 3rem;
-
-  .logo {
-    height: 4rem;
-  }
-}
-
-.form {
-  width: 100%;
-  background-color: #fff;
-  display: block;
-  padding: 1rem;
-}
-
-.form-title {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  font-weight: 600;
-  text-align: center;
-  color: #000;
-}
-
-.input-container {
-  position: relative;
-}
-
-.input-container {
-
-  input {
-    padding: .8rem 3rem .8rem .8rem;
-    line-height: 1.25rem;
-  }
-
-  button,
-  span {
-    display: grid;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    place-content: center;
-    box-shadow: none;
-    border: none;
-  }
-
-  button svg,
-  span svg {
-    color: #9CA3AF;
-    width: 1rem;
-    height: 1rem;
-  }
+.logo {
+  height: 4rem;
 }
 
 .login-button {
   width: 200px;
   height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
-
 
 .title {
   font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;

@@ -1,17 +1,8 @@
-<div class="wrapper h-100">
-  <div class="top d-flex flex-column align-items-center justify-content-center gap-4">
-    <img alt="" class="logo" src="/images/logo.png">
-    <p class="title m-0">Excellence in Every Step</p>
-  </div>
-
-  <div class="form px-4">
-    <div class="d-flex justify-content-center py-3">
-      <button (click)="login()" class="btn btn-primary rounded-1 text-white shadow-none border-0 login-button">
-        <img alt="" class="microsoft" src="/images/microsoft-logo.png">Login
-      </button>
-    </div>
-  </div>
-
+<div class="wrapper">
+  <img alt="" class="logo" src="/images/logo.png">
+  <button (click)="login()" class="btn btn-primary rounded-1 text-white shadow-none border-0 login-button">
+    <img alt="" class="microsoft" src="/images/microsoft-logo.png">Login
+  </button>
 </div>
 
 @if (loggingIn) {

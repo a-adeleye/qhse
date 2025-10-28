@@ -1,24 +1,34 @@
-<div class="d-flex flex-column flex-grow-1 h-100">
-  <div class="top d-flex flex-column align-items-center justify-content-center">
-    <img alt="" class="logo" src="/images/logo.png">
-    <p class="title m-0">Excellence in Every Step</p>
-  </div>
+<div class="home-container">
+  <div class="menu-grid">
+    <mat-card class="menu-card" aria-label="Start">
+      <div class="menu-header">
+        <div class="menu-avatar">
+          <mat-icon>play_arrow</mat-icon>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Start</div>
+          <div class="menu-subtitle">Begin a new task</div>
+        </div>
+      </div>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/start">Start</button>
+      </mat-card-actions>
+    </mat-card>
 
-  <div class="demo-section">
-    Button toggles badge visibility
-    <button matBadge="7" matButton="elevated">
-      Hide
-    </button>
+    <mat-card class="menu-card" aria-label="Logs">
+      <div class="menu-header">
+        <div class="menu-avatar">
+          <mat-icon>history</mat-icon>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Logs</div>
+          <div class="menu-subtitle">View activity logs</div>
+        </div>
+      </div>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/logs">Open Logs</button>
+      </mat-card-actions>
+    </mat-card>
   </div>
-
-  <div class="demo-section">
-    Icon with a badge
-    <mat-icon matBadge="15">home</mat-icon>
-    <!-- Include text description of the icon's meaning for screen-readers -->
-    <span class="cdk-visually-hidden">
-      Example with a home icon with overlaid badge showing the number 15
-    </span>
-  </div>
-  <div class="bottom flex-grow-1"></div>
 </div>
 

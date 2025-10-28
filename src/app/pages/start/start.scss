@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.start-container {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.form-wrap {
+  width: 100%;
+  max-width: 760px;
+}
+
+.q-card {
+  padding: 8px 12px 12px 12px;
+  border-radius: 16px;
+  background: var(--mat-sys-surface-container-highest);
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.q-header {
+  padding: 8px 8px 0 8px;
+}
+
+.q-title {
+  margin: 0 0 4px 0;
+  font-weight: 700;
+}
+
+.q-subtitle {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.q-list {
+  display: grid;
+  gap: 12px;
+  padding: 12px 8px;
+}
+
+.q-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+
+.q-options {
+  display: inline-flex;
+  gap: 12px;
+}
+
+.q-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px;
+}
+
+@media (max-width: 599px) {
+  .q-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+

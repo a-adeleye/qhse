@@ -1,0 +1,43 @@
+<div class="detail-container" *ngIf="log as l; else notFound">
+  <div class="topbar">
+    <a routerLink="/logs" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back to Logs</span>
+    </a>
+  </div>
+
+  <mat-card class="detail-card">
+    <div class="detail-header">
+      <div class="title-wrap">
+        <h2 class="title">{{ l.title }}</h2>
+        <div class="meta">
+          <span class="id">{{ l.id }}</span>
+          <span>•</span>
+          <span>{{ l.createdAt | date: 'medium' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-list">
+      <div class="qa-item" *ngFor="let a of l.answers">
+        <div class="q">{{ a.question }}</div>
+        <div class="a" [class.yes]="a.answer" [class.no]="!a.answer">
+          <mat-icon aria-hidden="true">{{ a.answer ? 'check_circle' : 'cancel' }}</mat-icon>
+          <span>{{ a.answer ? 'Yes' : 'No' }}</span>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<ng-template #notFound>
+  <div class="detail-container">
+    <a routerLink="/logs" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Back to Logs</span>
+    </a>
+    <p>Log not found.</p>
+  </div>
+  
+</ng-template>
+

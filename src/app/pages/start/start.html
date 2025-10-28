@@ -1,0 +1,28 @@
+<div class="start-container">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap">
+    <mat-card class="q-card">
+      <div class="q-header">
+        <h2 class="q-title">Quick Start Checklist</h2>
+        <p class="q-subtitle">Answer a few yes/no questions</p>
+      </div>
+
+      <div class="q-list" formArrayName="answers">
+        @for (q of questions; track q.id; let i = $index) {
+          <div class="q-item">
+            <div class="q-text">{{ q.text }}</div>
+            <mat-radio-group class="q-options" [formControlName]="i" aria-label="Answer">
+              <mat-radio-button [value]="true">Yes</mat-radio-button>
+              <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        }
+      </div>
+
+      <mat-card-actions class="q-actions">
+        <button mat-stroked-button type="button" routerLink="/">Cancel</button>
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>
+

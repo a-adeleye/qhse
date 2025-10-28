@@ -1,0 +1,41 @@
+<div class="logs-container">
+  <div class="header">
+    <h2 class="title">Logs</h2>
+    <span class="subtitle">Review previously submitted checklists</span>
+  </div>
+
+  <div class="table-wrap">
+    <table [dataSource]="data" class="mat-elevation-z1" mat-table>
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell> ID</th>
+        <td *matCellDef="let row" mat-cell> {{ row.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th *matHeaderCellDef mat-header-cell> Title</th>
+        <td *matCellDef="let row" mat-cell> {{ row.title }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th *matHeaderCellDef mat-header-cell> Date</th>
+        <td *matCellDef="let row" mat-cell> {{ row.createdAt | date: 'medium' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="summary">
+        <th *matHeaderCellDef mat-header-cell> Summary</th>
+        <td *matCellDef="let row" mat-cell>{{ yesCount(row) }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th *matHeaderCellDef mat-header-cell></th>
+        <td *matCellDef="let row" mat-cell>
+          <button (click)="open(row)" color="primary" mat-button>View</button>
+        </td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr (click)="open(row)" *matRowDef="let row; columns: displayedColumns;" class="click-row" mat-row></tr>
+    </table>
+  </div>
+</div>
+

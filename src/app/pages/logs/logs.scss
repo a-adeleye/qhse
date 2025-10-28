@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.logs-container {
+  height: 100%;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 16px 16px 24px;
+}
+
+.header .title {
+  margin: 0;
+}
+
+.header .subtitle {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.table-wrap {
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-highest);
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-mdc-header-cell {
+  font-weight: 600;
+}
+
+.click-row {
+  cursor: pointer;
+}
+
+tr.mat-mdc-row:hover {
+  background: color-mix(in oklab, var(--mat-sys-primary) 6%, transparent);
+}
+

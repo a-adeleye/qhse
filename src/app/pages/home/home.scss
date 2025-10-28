@@ -1,28 +1,91 @@
 :host {
+  display: block;
   height: 100%;
 }
 
-.top {
-  padding: 3rem;
-  gap: 1.5rem;
-
-  .logo {
-    height: 4rem;
-  }
-
-  .title {
-    font-family: Josefin Sans, Roboto, "Helvetica Neue", sans-serif;
-    color: var(--primary-color);
-  }
+.home-container {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg,
+      var(--mat-sys-surface-container-lowest) 0%,
+      var(--mat-sys-surface-container) 60%,
+      var(--mat-sys-surface-container-high) 100%);
 }
 
-.bottom {
-  background-image: url("/images/home-bg.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.menu-grid {
+  width: 100%;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
 }
 
-.note {
-  font-size: .7rem;
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+  padding: 8px 12px 12px 12px;
+  border-radius: 16px;
+  background: var(--mat-sys-surface-container-highest);
+  border: 1px solid var(--mat-sys-outline-variant);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 8px 0 8px;
+}
+
+.menu-card:hover,
+.menu-card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--mat-sys-primary);
+}
+
+.menu-card:focus-within {
+  outline: none;
+}
+
+.menu-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.menu-avatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--mat-sys-primary) 12%, transparent);
+  color: var(--mat-sys-primary);
+}
+
+.menu-title {
+  font-weight: 600;
+}
+
+.menu-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 0.9rem;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-card {
+    transition: none;
+  }
 }
