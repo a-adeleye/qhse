@@ -57,7 +57,7 @@ export class AuthService {
     });
   }
 
-  private loadFromStorage() {
+  loadFromStorage() {
     return this.localStorageRefService.getData(StorageKeysEnum.USER) as TokenModel;
   }
 

@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 export interface LogAnswer {
   question: string;
@@ -14,6 +15,7 @@ export interface LogEntry {
 
 @Injectable({providedIn: 'root'})
 export class LogsService {
+  _snackBar = inject(MatSnackBar)
   private readonly logs: LogEntry[] = [
     {
       id: 'LOG-001',
@@ -74,5 +76,11 @@ export class LogsService {
   getLogById(id: string): LogEntry | undefined {
     return this.logs.find(l => l.id === id);
   }
+
+   openSnackBar(message: string, type = 'error') {
+    const panelClass = type === 'success' ? 'bg-success' : 'bg-danger';
+    this._snackBar.open(message, 'close', {panelClass: panelClass, duration: 3000});
+  }
+
 }
 

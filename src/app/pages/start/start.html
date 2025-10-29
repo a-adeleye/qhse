@@ -1,28 +1,120 @@
 <div class="start-container">
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap">
+  <form [formGroup]="form"  (ngSubmit)="submit()" class="form-wrap">
     <mat-card class="q-card">
+      <!-- Sticky Header -->
       <div class="q-header">
-        <h2 class="q-title">Quick Start Checklist</h2>
-        <p class="q-subtitle">Answer a few yes/no questions</p>
+        <div class="header-content">
+          <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+
+          <div class="header-text">
+            <h1 class="q-title">QHSE-AZI</h1>
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="getProgress()"></div>
+              </div>
+              <p class="q-subtitle">{{getCompletedCount()}} of {{questions.length}} completed</p>
+            </div>
+          </div>
+
+          <button mat-flat-button [disabled]="form.invalid"  color="primary" type="submit" class="submit-btn">
+            Submit
+          </button>
+        </div>
       </div>
 
-      <div class="q-list" formArrayName="answers">
-        @for (q of questions; track q.id; let i = $index) {
-          <div class="q-item">
-            <div class="q-text">{{ q.text }}</div>
-            <mat-radio-group class="q-options" [formControlName]="i" aria-label="Answer">
-              <mat-radio-button [value]="true">Yes</mat-radio-button>
-              <mat-radio-button [value]="false">No</mat-radio-button>
+      <!-- Questions List -->
+      <div class="q-list">
+        <div *ngFor="let q of questions; let i = index" class="q-item">
+          <div class="q-text">
+            <span class="question-number">{{i + 1}}.</span>
+            {{q.title}}
+            <span class="required" *ngIf="q.required">*</span>
+          </div>
+
+          <div *ngIf="q.type === 'Choice'" class="choice-group">
+            <mat-radio-group [formControlName]="q.id" class="radio-group">
+              <mat-radio-button value="Yes" class="radio-btn ">
+                <span class="badge all-ok">Yes</span>
+              </mat-radio-button>
+              <mat-radio-button value="No" class="radio-btn">
+                <span class="badge unserviceable">No</span>
+              </mat-radio-button>
             </mat-radio-group>
           </div>
-        }
+
+          <div *ngIf="q.type === 'BPS'" class="choice-group">
+            <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
+              <mat-radio-button value="Yes" class="radio-btn">Yes</mat-radio-button>
+              <mat-radio-button value="No" class="radio-btn">No</mat-radio-button>
+              <mat-radio-button value="Not Applicable for this Vehicle" class="radio-btn">
+                Not Applicable for this Vehicle
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="q.type === 'Shift'" class="choice-group">
+            <mat-radio-group [formControlName]="q.id" class="radio-group">
+              <mat-radio-button value="Morning" class="radio-btn">Morning</mat-radio-button>
+              <mat-radio-button value="Night" class="radio-btn">Night</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="q.type === 'Condition'" class="condition-group">
+            <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
+              <mat-radio-button value="All Ok" class="radio-btn ok">
+                <span class="badge all-ok">All Ok</span>
+              </mat-radio-button>
+
+              <mat-radio-button value="Needs Attention" class="radio-btn attention">
+                <span class="badge needs-attention">Needs Attention</span>
+              </mat-radio-button>
+
+              <mat-radio-button value="Unserviceable" class="radio-btn bad">
+                <span class="badge unserviceable">Unserviceable</span>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div *ngIf="q.type === 'Single_line_of_text'">
+            <mat-form-field appearance="outline" class="full-width">
+              <input matInput [formControlName]="q.id" placeholder="Enter text">
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="q.type === 'Date_and_Time'">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Select date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [formControlName]="q.id"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
       </div>
 
-      <mat-card-actions class="q-actions">
-        <button mat-stroked-button type="button" routerLink="/">Cancel</button>
-        <button mat-raised-button color="primary" type="submit">Submit</button>
-      </mat-card-actions>
+      <div class="mobile-spacer"></div>
     </mat-card>
+
+    <div class="mobile-actions">
+      <button mat-flat-button color="primary" type="submit" class="mobile-submit-btn">
+        Submit Inspection
+      </button>
+    </div>
   </form>
 </div>
+
+
+@if (loading){
+  <app-loading/>
+}
+
+
 

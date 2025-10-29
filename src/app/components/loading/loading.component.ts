@@ -1,10 +1,14 @@
-import {Component} from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-loading',
-  imports: [],
+  standalone: true,
+  imports: [NgClass],
   templateUrl: './loading.component.html',
-  styleUrl: './loading.component.scss'
+  styleUrls: ['./loading.component.scss'],
 })
 export class Loading {
+  @Input() backgroundColor = 'rgba(0, 0, 0, 0.4)';
+  @Input() textColor = 'text-light';
 }

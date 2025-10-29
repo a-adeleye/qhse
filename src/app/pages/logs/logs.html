@@ -1,41 +1,96 @@
 <div class="logs-container">
-  <div class="header">
-    <h2 class="title">Logs</h2>
-    <span class="subtitle">Review previously submitted checklists</span>
-  </div>
+  <!-- Header matching the form style -->
 
-  <div class="table-wrap">
-    <table [dataSource]="data" class="mat-elevation-z1" mat-table>
-      <ng-container matColumnDef="id">
-        <th *matHeaderCellDef mat-header-cell> ID</th>
-        <td *matCellDef="let row" mat-cell> {{ row.id }}</td>
-      </ng-container>
+  <!-- Content Area -->
+  <div class="logs-content">
 
-      <ng-container matColumnDef="title">
-        <th *matHeaderCellDef mat-header-cell> Title</th>
-        <td *matCellDef="let row" mat-cell> {{ row.title }}</td>
-      </ng-container>
+    <div class="q-header">
+      <div class="header-content">
+        <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
 
-      <ng-container matColumnDef="createdAt">
-        <th *matHeaderCellDef mat-header-cell> Date</th>
-        <td *matCellDef="let row" mat-cell> {{ row.createdAt | date: 'medium' }}</td>
-      </ng-container>
+        <div class="header-text">
+          <h1 class="q-title">Logs</h1>
+          <p class="q-subtitle">Review previously submitted checklists</p>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile Card View -->
+    <div class="cards-container">
+      <div *ngFor="let row of data" class="log-card mat-elevation-z1" (click)="open(row)">
+        <div class="card-header">
+          <div class="card-title-group">
+            <h3 class="card-title">{{ row.Title || 'Untitled' }}</h3>
+            <span class="card-id">ID: {{ row.ID }}</span>
+          </div>
+          <button (click)="open(row); $event.stopPropagation()"
+                  color="primary"
+                  mat-icon-button
+                  class="view-button">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </div>
 
-      <ng-container matColumnDef="summary">
-        <th *matHeaderCellDef mat-header-cell> Summary</th>
-        <td *matCellDef="let row" mat-cell>{{ yesCount(row) }}</td>
-      </ng-container>
+        <div class="card-content">
+          <div class="card-row">
+            <mat-icon class="card-icon">calendar_today</mat-icon>
+            <span class="card-date">{{ row.DateOfinspection | date: 'mediumDate' }}</span>
+          </div>
+          <div class="card-row">
+            <mat-icon class="card-icon">check_circle</mat-icon>
+            <span class="card-summary">{{ yesCount(row) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-      <ng-container matColumnDef="action">
-        <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let row" mat-cell>
-          <button (click)="open(row)" color="primary" mat-button>View</button>
-        </td>
-      </ng-container>
+    <!-- Desktop Table View -->
+    <div class="table-wrap">
+      <table [dataSource]="data" class="mat-elevation-z1" mat-table>
+        <ng-container matColumnDef="id">
+          <th *matHeaderCellDef mat-header-cell>ID</th>
+          <td *matCellDef="let row" mat-cell>{{ row.ID }}</td>
+        </ng-container>
 
-      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr (click)="open(row)" *matRowDef="let row; columns: displayedColumns;" class="click-row" mat-row></tr>
-    </table>
+        <ng-container matColumnDef="title">
+          <th *matHeaderCellDef mat-header-cell>Title</th>
+          <td *matCellDef="let row" mat-cell>{{ row.Title }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th *matHeaderCellDef mat-header-cell>Inspection Date</th>
+          <td *matCellDef="let row" mat-cell>{{ row.DateOfinspection | date: 'medium' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="summary">
+          <th *matHeaderCellDef mat-header-cell>Summary</th>
+          <td *matCellDef="let row" mat-cell>{{ yesCount(row) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let row" mat-cell>
+            <button (click)="open(row)" color="primary" mat-button>View</button>
+          </td>
+        </ng-container>
+
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr (click)="open(row)" *matRowDef="let row; columns: displayedColumns;" class="click-row" mat-row></tr>
+      </table>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span class="loading-text">Loading logs...</span>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && data.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">description</mat-icon>
+      <h3>No logs found</h3>
+      <p>Submitted checklists will appear here</p>
+    </div>
   </div>
 </div>
-
