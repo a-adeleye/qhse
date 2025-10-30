@@ -24,10 +24,11 @@ import {InternetConnectivityService} from '@shared/services/internet-connectivit
   styleUrl: './logs.scss'
 })
 export class LogsComponent implements OnInit {
-  displayedColumns = ['id', 'title', 'createdAt', 'summary', 'action'];
+  displayedColumns = ['id', 'title','createdBy', 'createdAt','overallCondition' ,'action'];
   data: any[] = [];
   loading = true;
   isOnline = true;
+  siteUsers: any[] = [];
   private connectivityService = inject(InternetConnectivityService);
 
   constructor(
@@ -38,6 +39,7 @@ export class LogsComponent implements OnInit {
 
   async ngOnInit() {
     await this.setupOnlineStatusListeners();
+    await this.loadSiteUsers();
     await this.loadLogs();
   }
 
@@ -47,6 +49,27 @@ export class LogsComponent implements OnInit {
       this.isOnline = online;
       console.log('Connectivity changed:', online ? 'Online' : 'Offline');
     });
+  }
+
+  private async loadSiteUsers() {
+    if (this.isOnline) {
+      try {
+        this.siteUsers = await this.sharepointService.getSiteUsers().toPromise();
+        console.log('Loaded site users:', this.siteUsers);
+      } catch (error) {
+        console.error('Error loading site users:', error);
+        this.siteUsers = [];
+      }
+    }
+  }
+
+  getUserName(userId: number): string {
+    if (!userId || !this.siteUsers || this.siteUsers.length === 0) {
+      return 'Unknown User';
+    }
+
+    const user = this.siteUsers.find(u => u.Id === userId);
+    return user ? user.Title : `User (${userId})`;
   }
 
   async loadLogs() {
@@ -59,16 +82,17 @@ export class LogsComponent implements OnInit {
           const sharepointData = res.d.results.map((item: any) => ({
             ...item,
             isLocal: false,
-            syncStatus: 'synced'
+            syncStatus: 'synced',
+            createdByName: this.getUserName(item.DoneById)
           }));
 
           const localData = this.getLocalSubmissions().map((item: any) => ({
             ...item,
             isLocal: true,
-            syncStatus: 'pending'
+            syncStatus: 'pending',
+            createdByName: item.UserName || 'Local User'
           }));
 
-          // Combine both data sources
           this.data = [...localData, ...sharepointData].sort((a, b) =>
             new Date(b.Created).getTime() - new Date(a.Created).getTime()
           );
@@ -89,7 +113,8 @@ export class LogsComponent implements OnInit {
     this.data = this.getLocalSubmissions().map((item: any) => ({
       ...item,
       isLocal: true,
-      syncStatus: 'pending'
+      syncStatus: 'pending',
+      createdByName: item.userName || 'Local User'
     }));
     this.loading = false;
   }
@@ -111,7 +136,7 @@ export class LogsComponent implements OnInit {
     this.isOnline = await this.connectivityService.checkInternetConnection();
     if (row.isLocal && this.isOnline) {
       this.loading = true;
-      const { isLocal, syncStatus, ID, Modified, Created,UserName, ...submissionData } = row;
+      const { isLocal, syncStatus, ID, Modified, Created, UserName, createdByName, ...submissionData } = row;
 
       this.sharepointService.addListItem('Airside - FBO Vehicle Daily Inspection Checklist', submissionData)
         .subscribe({
@@ -177,6 +202,19 @@ export class LogsComponent implements OnInit {
     if (this.isOnline) {
       const pendingItems = this.data.filter(item => item.isLocal);
       pendingItems.forEach(item => this.retrySubmission(item));
+    }
+  }
+
+  getOverallStatusClass(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'all ok':
+        return 'all-ok';
+      case 'needs attention':
+        return 'needs-attention';
+      case 'unserviceable':
+        return 'unserviceable';
+      default:
+        return 'not-specified';
     }
   }
 }

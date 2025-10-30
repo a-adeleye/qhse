@@ -41,11 +41,9 @@ export class LogDetailComponent implements OnInit {
     this.sharepointService.getSiteUsers().subscribe({
       next: (res: any) => {
         this.siteUsers = res;
-        this.loading = false;
       },
       error: (error:any) => {
         console.error('Error loading site users:', error);
-        this.loading = false;
       }
     });
   }
