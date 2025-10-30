@@ -52,6 +52,21 @@ html {
   ));
 }
 
+:root {
+  --primary-color: #ff6e25;
+  --primary-hover: #e65a1c;
+  --primary-light: #fff5f0;
+}
+
+/* Global Angular Material radio button override */
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-selected-focus-icon-color: #ff6e25;
+  --mdc-radio-selected-hover-icon-color: #ff6e25;
+  --mdc-radio-selected-icon-color: #ff6e25;
+  --mdc-radio-selected-pressed-icon-color: #ff6e25;
+  --mat-radio-checked-ripple-color: #ff6e25;
+}
+
 body {
   // Default the application to a light color theme. This can be changed to
   // `dark` to enable the dark color theme, or to `light dark` to defer to the

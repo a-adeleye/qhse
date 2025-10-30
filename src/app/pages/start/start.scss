@@ -1,12 +1,12 @@
 .start-container {
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
-  padding: 0;
+  padding: 22px 0;
 }
 
 @media (min-width: 768px) {
   .start-container {
-    padding: 24px;
+    padding: 45px;
   }
 }
 
@@ -67,6 +67,11 @@
   color: #1a1a1a;
 }
 
+.back-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
 .back-btn mat-icon {
   font-size: 24px;
   width: 24px;
@@ -118,7 +123,7 @@
 
 .progress-fill {
   height: 100%;
-  background: #1a1a1a;
+  background: var(--primary-color);
   transition: width 0.3s ease;
 }
 
@@ -139,6 +144,13 @@
 .submit-btn {
   display: none;
   flex-shrink: 0;
+  background: var(--primary-color) !important;
+  color: white;
+  cursor: pointer;
+}
+
+.submit-btn:not([disabled]):hover {
+  background: var(--primary-hover) !important;
 }
 
 @media (min-width: 768px) {
@@ -147,6 +159,7 @@
     min-width: 120px;
     height: 40px;
     font-weight: 500;
+    cursor: pointer;
   }
 }
 
@@ -191,7 +204,6 @@
 }
 
 .question-number {
-  color: #444;
   margin-right: 8px;
   font-weight: 600;
 }
@@ -236,12 +248,12 @@
 }
 
 .radio-btn ::ng-deep .mdc-radio--checked .mdc-radio__background {
-  border-color: #1a1a1a;
-  background-color: #1a1a1a;
+  border-color: var(--primary-color);
+  background-color: var(--primary-color);
 }
 
 .radio-btn ::ng-deep .mdc-radio__background::before {
-  background-color: #1a1a1a;
+  background-color: var(--primary-color);
 }
 
 .badge {
@@ -289,13 +301,13 @@
 .full-width ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__leading,
 .full-width ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__trailing,
 .full-width ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__notch {
-  border-color: #d0d0d0;
+  border-color: var(--primary-color);
 }
 
 .full-width ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 .full-width ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
 .full-width ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
-  border-color: #1a1a1a;
+  border-color: var(--primary-color);
 }
 
 .mobile-spacer {
@@ -330,8 +342,12 @@
   width: 100%;
   height: 48px;
   font-size: 16px;
-  font-weight: 600;
   letter-spacing: 0.02em;
+  background: var(--primary-color) !important;
+}
+
+.mobile-submit-btn:not([disabled]):hover {
+  background: var(--primary-hover) !important;
 }
 
 .mobile-submit-btn ::ng-deep .mat-mdc-button-touch-target {
@@ -386,44 +402,47 @@
   }
 }
 
-.meta-control ::ng-deep .mat-mdc-text-field-wrapper {
-  background: #fafafa;
+
+.radio-btn {
+  margin-bottom: 0;
 }
 
-.meta-control ::ng-deep .mdc-notched-outline__leading,
-.meta-control ::ng-deep .mdc-notched-outline__trailing,
-.meta-control ::ng-deep .mdc-notched-outline__notch {
-  border-color: #e5e5e5;
+.radio-btn {
+  margin-bottom: 0;
 }
 
-.meta-control ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__leading,
-.meta-control ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__trailing,
-.meta-control ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__notch {
-  border-color: #d0d0d0;
+/* Fix for radio button colors */
+.radio-btn ::ng-deep .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle {
+  border-color: var(--primary-color) !important;
 }
 
-.meta-control ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
-.meta-control ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing,
-.meta-control ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch {
-  border-color: #1a1a1a;
+.radio-btn ::ng-deep .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__inner-circle {
+  border-color: var(--primary-color) !important;
+  background-color: var(--primary-color) !important;
 }
 
-.dense ::ng-deep .mat-mdc-form-field-infix {
-  padding-top: 6px;
-  padding-bottom: 6px;
+.radio-btn ::ng-deep .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__outer-circle {
+  border-color: #666;
 }
 
-.dense ::ng-deep .mat-mdc-form-field-subscript-wrapper {
-  display: none;
+.radio-btn ::ng-deep .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__inner-circle {
+  background-color: transparent;
 }
 
-.title-field ::ng-deep input {
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.badge {
+  display: inline-flex;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
-.inline-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
+.badge {
+  display: inline-flex;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }

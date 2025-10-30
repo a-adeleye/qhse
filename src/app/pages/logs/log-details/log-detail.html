@@ -22,113 +22,105 @@
         </div>
       </div>
 
-      <mat-card class="summary-card">
-        <div class="summary-header">
-          <h2 class="summary-title">Inspection Summary</h2>
-          <div class="status-badge" [class]="getOverallStatusClass(l.OverallCondition)">
-            {{ l.OverallCondition || 'Not Specified' }}
-          </div>
-        </div>
 
-        <div class="summary-grid">
-          <div class="summary-item">
-            <mat-icon class="summary-icon">person</mat-icon>
-            <div class="summary-text">
-              <span class="label">Done By</span>
-              <span class="value">{{ getDoneByName() }}</span>
+      <div class="p-5 grid">
+        <mat-card class="summary-card">
+          <div class="summary-header">
+            <h2 class="summary-title">Inspection Summary</h2>
+            <div class="status-badge" [class]="getOverallStatusClass(l.OverallCondition)">
+              {{ l.OverallCondition || 'Not Specified' }}
             </div>
           </div>
 
-          <div class="summary-item">
-            <mat-icon class="summary-icon">schedule</mat-icon>
-            <div class="summary-text">
-              <span class="label">Shift</span>
-              <span class="value">{{ l.Shift || 'Not Specified' }}</span>
-            </div>
-          </div>
-
-          <div class="summary-item">
-            <mat-icon class="summary-icon">calendar_today</mat-icon>
-            <div class="summary-text">
-              <span class="label">Inspection Date</span>
-              <span class="value">{{ l.DateOfinspection | date: 'medium' }}</span>
-            </div>
-          </div>
-
-        </div>
-      </mat-card>
-
-      <mat-card class="qa-card">
-        <div class="qa-header">
-          <h2 class="qa-title">Checklist Items</h2>
-        </div>
-
-        <div class="qa-list">
-          @for (question of getQuestionsWithAnswers(l); track $index; let i = $index) {
-            <div class="qa-item" [class]="getAnswerClass(question.answer)">
-              <div class="question-section">
-                <span class="question-number">{{ i + 1 }}.</span>
-                <div class="question-text">{{ question.text }}</div>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <mat-icon class="summary-icon">person</mat-icon>
+              <div class="summary-text">
+                <span class="label">Done By</span>
+                <span class="value">{{ getDoneByName() }}</span>
               </div>
-              <div class="answer-section">
-                <div class="answer-badge" [class]="getAnswerClass(question.answer)">
-                  <mat-icon class="answer-icon">
-                    {{ question.answer === 'Yes' ? 'check_circle' : question.answer === 'No' ? 'cancel' : 'help_outline' }}
-                  </mat-icon>
-                  <span class="answer-text">{{ question.answer || 'Not Answered' }}</span>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">schedule</mat-icon>
+              <div class="summary-text">
+                <span class="label">Shift</span>
+                <span class="value">{{ l.Shift || 'Not Specified' }}</span>
+              </div>
+            </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">calendar_today</mat-icon>
+              <div class="summary-text">
+                <span class="label">Inspection Date</span>
+                <span class="value">{{ l.DateOfinspection | date: 'medium' }}</span>
+              </div>
+            </div>
+
+          </div>
+        </mat-card>
+
+        <mat-card class="qa-card">
+          <div class="qa-header">
+            <h2 class="qa-title">Checklist Items</h2>
+          </div>
+
+          <div class="qa-list">
+            @for (question of getQuestionsWithAnswers(l); track $index; let i = $index) {
+              <div class="qa-item" [class]="getAnswerClass(question.answer)">
+                <div class="question-section">
+                  <span class="question-number">{{ i + 1 }}.</span>
+                  <div class="question-text">{{ question.text }}</div>
                 </div>
-              </div>
-            </div>
-          }
-        </div>
-      </mat-card>
-
-      @if (hasAdditionalInfo(l)) {
-        <mat-card class="info-card">
-          <h2 class="info-title">Additional Information</h2>
-          <div class="info-grid">
-            @if (l.Created) {
-              <div class="info-item">
-                <span class="info-label">Created:</span>
-                <span class="info-value">{{ l.Created | date: 'medium' }}</span>
-              </div>
-            }
-            @if (l.Modified) {
-              <div class="info-item">
-                <span class="info-label">Last Modified:</span>
-                <span class="info-value">{{ l.Modified | date: 'medium' }}</span>
-              </div>
-            }
-            @if (isLocal) {
-              <div class="info-item">
-                <span class="info-label">Storage:</span>
-                <span class="info-value local-text">Local Device</span>
-              </div>
-            } @else {
-              <div class="info-item">
-                <span class="info-label">Storage:</span>
-                <span class="info-value synced-text">Cloud (SharePoint)</span>
+                <div class="answer-section">
+                  <div class="answer-badge" [class]="getAnswerClass(question.answer)">
+                    <mat-icon class="answer-icon">
+                      {{ question.answer === 'Yes' ? 'check_circle' : question.answer === 'No' ? 'cancel' : 'help_outline' }}
+                    </mat-icon>
+                    <span class="answer-text">{{ question.answer || 'Not Answered' }}</span>
+                  </div>
+                </div>
               </div>
             }
           </div>
         </mat-card>
-      }
+
+        @if (hasAdditionalInfo(l)) {
+          <mat-card class="info-card">
+            <h2 class="info-title">Additional Information</h2>
+            <div class="info-grid">
+              @if (l.Created) {
+                <div class="info-item">
+                  <span class="info-label">Created:</span>
+                  <span class="info-value">{{ l.Created | date: 'medium' }}</span>
+                </div>
+              }
+              @if (l.Modified) {
+                <div class="info-item">
+                  <span class="info-label">Last Modified:</span>
+                  <span class="info-value">{{ l.Modified | date: 'medium' }}</span>
+                </div>
+              }
+              @if (isLocal) {
+                <div class="info-item">
+                  <span class="info-label">Storage:</span>
+                  <span class="info-value local-text">Local Device</span>
+                </div>
+              } @else {
+                <div class="info-item">
+                  <span class="info-label">Storage:</span>
+                  <span class="info-value synced-text">Cloud (SharePoint)</span>
+                </div>
+              }
+            </div>
+          </mat-card>
+        }
+      </div>
     </div>
   </div>
 } @else {
   @if (!loading) {
     <div class="detail-container">
-      <div class="q-header">
-        <div class="header-content">
-          <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-          <div class="header-text">
-            <h1 class="q-title">Log Not Found</h1>
-          </div>
-        </div>
-      </div>
-
       <div class="not-found-content">
         <mat-icon class="not-found-icon">search_off</mat-icon>
         <h2>Inspection log not found</h2>
