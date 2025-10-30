@@ -34,6 +34,7 @@
     "@angular/service-worker": "^20.3.0",
     "@azure/msal-angular": "^4.0.20",
     "@azure/msal-browser": "^4.25.1",
+    "@netlify/angular-runtime": "^3.0.0",
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "rxjs": "~7.8.0",
