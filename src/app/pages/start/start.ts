@@ -1,21 +1,21 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormControl} from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatButtonModule } from '@angular/material/button';
-import { Router, RouterLink } from '@angular/router';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { NgFor, NgIf } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatIconModule } from '@angular/material/icon';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { SharePointService } from '@shared/services/sharepoint/sharepoint.service';
-import { Location } from '@angular/common';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, ReactiveFormsModule, UntypedFormGroup, Validators} from '@angular/forms';
+import {MatCardModule} from '@angular/material/card';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {Location} from '@angular/common';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {SharePointService} from '@shared/services/sharepoint/sharepoint.service';
 import {AuthService} from '@shared/services/auth/auth.service';
 import {Loading} from '@shared/components/loading/loading.component';
 import {LogsService} from '@shared/services/logs/logs.service';
+import {InternetConnectivityService} from '@shared/services/internet-connectivity/internet-connectivity.service';
 
 @Component({
   selector: 'app-start',
@@ -29,8 +29,7 @@ import {LogsService} from '@shared/services/logs/logs.service';
     MatButtonModule,
     MatInputModule,
     MatSelectModule,
-    NgIf,
-    NgFor,
+    MatTooltipModule,
     MatFormFieldModule,
     MatDatepickerModule,
     MatIconModule,
@@ -38,11 +37,12 @@ import {LogsService} from '@shared/services/logs/logs.service';
     Loading,
   ]
 })
-export class Start implements OnInit {
+export class Start implements OnInit, OnDestroy {
   sharepointService = inject(SharePointService);
   location = inject(Location);
-  router = inject(Router);
   loading = false;
+  isOnline = true;
+  private connectivitySubscription: any;
 
   questions = [
     { id: "Title", title: "Title", type: "Single_line_of_text", required: true },
@@ -70,17 +70,32 @@ export class Start implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private logService = inject(LogsService);
+  private connectivityService = inject(InternetConnectivityService);
 
-  form = this.fb.group({});
+  form:UntypedFormGroup = this.fb.group({});
 
-  ngOnInit() {
+  async ngOnInit() {
     const formGroupConfig: any = {};
     this.questions.forEach(q => {
       formGroupConfig[q.id] = [null, q.required ? Validators.required : null];
     });
 
+    const date = new Date();
     this.form = this.fb.group(formGroupConfig);
     this.form.addControl('DoneById', new FormControl(this.authService.loadFromStorage()?.Id, Validators.required));
+    this.form.get('Title')?.setValue(this.generateTitle());
+    this.form.get('DateOfinspection')?.setValue(date);
+
+    this.isOnline = await this.connectivityService.checkInternetConnection();
+    this.connectivityService.onConnectionChange((online: boolean) => {
+      this.isOnline = online;
+      console.log('Connectivity changed:', online ? 'Online' : 'Offline');
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.connectivitySubscription) {
+    }
   }
 
   goBack() {
@@ -88,38 +103,98 @@ export class Start implements OnInit {
   }
 
   getCompletedCount(): number {
-    const controls = Object.values(this.form.controls);
-    return controls.filter((control: any) =>
+    const controls = Object.entries(this.form.controls)
+      .filter(([key]) => key !== 'DoneById');
+
+    return controls.filter(([_, control]: any) =>
       control.value !== null && control.value !== ''
     ).length;
   }
 
   getProgress(): number {
-    return Math.round((this.getCompletedCount() / this.questions.length) * 100);
+    const totalQuestions = this.questions.length; // only visible ones
+    return Math.round((this.getCompletedCount() / totalQuestions) * 100);
   }
 
-  submit() {
+  async submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.loading = true;
+    const formData = {
+      ...this.form.value,
+      Created: new Date().toISOString(),
+      Modified: new Date().toISOString(),
+      ID: this.generateLocalId(),
+      isLocal: true,
+      UserName:this.authService.currentUser.name
+    };
 
-    console.log('Form submitted:', this.form.value);
+    const isOnline = await this.connectivityService.checkInternetConnection();
+    this.isOnline = isOnline;
 
-    let form = this.form.value;
+    if (isOnline) {
+      this.submitToSharePoint(formData);
+    } else {
+      this.saveToLocalStorage(formData);
+      this.loading = false;
+      this.logService.openSnackBar('Checklist saved locally. Will sync when online.', 'success');
+      this.goBack();
+    }
+  }
 
+  private submitToSharePoint(formData: any): void {
     this.sharepointService.addListItem('Airside - FBO Vehicle Daily Inspection Checklist', this.form.value)
-      .subscribe(res => {
-        console.log(res);
-        this.loading = false;
-        this.logService.openSnackBar('Checklist added successfully!', 'success');
-        this.goBack();
-      }, error => {
-        console.log(error);
-        this.logService.openSnackBar('Checklist not saved!', 'error');
-        this.loading = false;
+      .subscribe({
+        next: (res) => {
+          console.log('Successfully submitted to SharePoint:', res);
+          this.loading = false;
+          this.logService.openSnackBar('Checklist added successfully!', 'success');
+          this.goBack();
+        },
+        error: (error) => {
+          console.log('Failed to submit to SharePoint, saving locally:', error);
+          this.saveToLocalStorage(formData);
+          this.loading = false;
+          this.logService.openSnackBar('Checklist saved locally. Will sync when online.', 'success');
+          this.goBack();
+        }
       });
+  }
+
+  private saveToLocalStorage(formData: any): void {
+    try {
+      const pendingSubmissions = this.getPendingSubmissions();
+      pendingSubmissions.push(formData);
+      localStorage.setItem('pendingChecklistSubmissions', JSON.stringify(pendingSubmissions));
+      console.log('Successfully saved to local storage:', formData.ID);
+    } catch (error) {
+      console.error('Error saving to local storage:', error);
+      this.logService.openSnackBar('Error saving locally. Please try again.', 'error');
+    }
+  }
+
+  private generateLocalId(): string {
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const time = Date.now().toString().slice(-4);
+    return `L${time}${random}`;
+  }
+
+  private getPendingSubmissions(): any[] {
+    try {
+      const stored = localStorage.getItem('pendingChecklistSubmissions');
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Error reading from local storage:', error);
+      return [];
+    }
+  }
+
+  private generateTitle() {
+    const date = new Date().toISOString().split('T')[0];
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `Inspection ${date} ${random}`;
   }
 }

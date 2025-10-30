@@ -11,6 +11,16 @@ export class SharePointService {
   constructor(private http: HttpClient) {
   }
 
+  getSiteUsers(): Observable<any> {
+    const apiUrl = `${environment.siteUrl}/siteusers`;
+    const headers = new HttpHeaders({
+      'Accept': 'application/json;odata=verbose'
+    });
+    return this.http.get<any>(apiUrl, { headers }).pipe(
+      map(res => res.d?.results ?? [])
+    );
+  }
+
   getListItems<T>(listName: string, filter: string | null = null): Observable<ResponseModel<T>> {
     const endpoint = `${environment.siteUrl}/lists/getbytitle('${listName}')/items${filter ?? ''}`;
     return this.http.get<ResponseModel<T>>(endpoint);
@@ -28,6 +38,7 @@ export class SharePointService {
 
   updateListItem(
     listName: string,
+
     itemId: number,
     data: Record<string, unknown>
   ): Observable<any> {

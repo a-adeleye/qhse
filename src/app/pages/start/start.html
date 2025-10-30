@@ -1,7 +1,6 @@
 <div class="start-container">
-  <form [formGroup]="form"  (ngSubmit)="submit()" class="form-wrap">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap">
     <mat-card class="q-card">
-      <!-- Sticky Header -->
       <div class="q-header">
         <div class="header-content">
           <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
@@ -9,95 +8,123 @@
           </button>
 
           <div class="header-text">
-            <h1 class="q-title">QHSE-AZI</h1>
+            <div class="header-main">
+              <h1 class="q-title">New Inspection</h1>
+              <div class="connectivity-status" [class]="isOnline ? 'online' : 'offline'"
+                   matTooltip="{{ isOnline ? 'You are online' : 'You are offline - forms will be saved locally' }}"
+                   matTooltipPosition="below">
+                <mat-icon class="status-icon">
+                  {{ isOnline ? 'wifi' : 'wifi_off' }}
+                </mat-icon>
+                <span class="status-text">
+                  {{ isOnline ? 'Online' : 'Offline' }}
+                </span>
+              </div>
+            </div>
+
             <div class="progress-container">
               <div class="progress-bar">
                 <div class="progress-fill" [style.width.%]="getProgress()"></div>
               </div>
-              <p class="q-subtitle">{{getCompletedCount()}} of {{questions.length}} completed</p>
+              <p class="q-subtitle">{{ getCompletedCount() }} of {{ questions.length }} completed</p>
             </div>
           </div>
 
-          <button mat-flat-button [disabled]="form.invalid"  color="primary" type="submit" class="submit-btn">
-            Submit
+          <button mat-flat-button [disabled]="form.invalid" color="primary" type="submit" class="submit-btn">
+            @if (isOnline) {
+              <span>Submit</span>
+            } @else {
+              <span>Save Locally</span>
+            }
           </button>
         </div>
       </div>
 
-      <!-- Questions List -->
       <div class="q-list">
-        <div *ngFor="let q of questions; let i = index" class="q-item">
-          <div class="q-text">
-            <span class="question-number">{{i + 1}}.</span>
-            {{q.title}}
-            <span class="required" *ngIf="q.required">*</span>
+        @for (q of questions; track q.id; let i = $index) {
+          <div class="q-item">
+            <div class="q-text">
+              <span class="question-number">{{ i + 1 }}.</span>
+              {{ q.title }}
+              @if (q.required) {
+                <span class="required">*</span>
+              }
+            </div>
+
+            @if (q.type === 'Choice') {
+              <div class="choice-group">
+                <mat-radio-group [formControlName]="q.id" class="radio-group">
+                  <mat-radio-button value="Yes" class="radio-btn">
+                    <span class="badge all-ok">Yes</span>
+                  </mat-radio-button>
+                  <mat-radio-button value="No" class="radio-btn">
+                    <span class="badge unserviceable">No</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            }
+
+            @if (q.id === 'IstheAnkerbatterypercentagesuffi') {
+              <div class="choice-group">
+                <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
+                  <mat-radio-button value="Yes" class="radio-btn">
+                    <span class="badge all-ok">Yes</span>
+                  </mat-radio-button>
+                  <mat-radio-button value="No" class="radio-btn">
+                    <span class="badge unserviceable">No</span>
+                  </mat-radio-button>
+                  <mat-radio-button value="Not Applicable for this Vehicle" class="radio-btn">
+                    <span class="badge needs-attention">Not Applicable for this Vehicle</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            }
+
+            @if (q.type === 'Shift') {
+              <div class="choice-group">
+                <mat-radio-group [formControlName]="q.id" class="radio-group">
+                  <mat-radio-button value="Morning" class="radio-btn">Morning</mat-radio-button>
+                  <mat-radio-button value="Night" class="radio-btn">Night</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            }
+
+            @if (q.type === 'Condition') {
+              <div class="condition-group">
+                <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
+                  <mat-radio-button value="All Ok" class="radio-btn ok">
+                    <span class="badge all-ok">All Ok</span>
+                  </mat-radio-button>
+                  <mat-radio-button value="Needs Attention" class="radio-btn attention">
+                    <span class="badge needs-attention">Needs Attention</span>
+                  </mat-radio-button>
+                  <mat-radio-button value="Unserviceable" class="radio-btn bad">
+                    <span class="badge unserviceable">Unserviceable</span>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            }
+
+            @if (q.type === 'Single_line_of_text') {
+              <mat-form-field appearance="outline" class="full-width">
+                <input matInput [formControlName]="q.id" placeholder="Enter text" />
+              </mat-form-field>
+            }
+
+            @if (q.type === 'Date_and_Time') {
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select date</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  [formControlName]="q.id"
+                  placeholder="MM/DD/YYYY" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            }
           </div>
-
-          <div *ngIf="q.type === 'Choice'" class="choice-group">
-            <mat-radio-group [formControlName]="q.id" class="radio-group">
-              <mat-radio-button value="Yes" class="radio-btn ">
-                <span class="badge all-ok">Yes</span>
-              </mat-radio-button>
-              <mat-radio-button value="No" class="radio-btn">
-                <span class="badge unserviceable">No</span>
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div *ngIf="q.type === 'BPS'" class="choice-group">
-            <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
-              <mat-radio-button value="Yes" class="radio-btn">Yes</mat-radio-button>
-              <mat-radio-button value="No" class="radio-btn">No</mat-radio-button>
-              <mat-radio-button value="Not Applicable for this Vehicle" class="radio-btn">
-                Not Applicable for this Vehicle
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div *ngIf="q.type === 'Shift'" class="choice-group">
-            <mat-radio-group [formControlName]="q.id" class="radio-group">
-              <mat-radio-button value="Morning" class="radio-btn">Morning</mat-radio-button>
-              <mat-radio-button value="Night" class="radio-btn">Night</mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div *ngIf="q.type === 'Condition'" class="condition-group">
-            <mat-radio-group [formControlName]="q.id" class="radio-group vertical">
-              <mat-radio-button value="All Ok" class="radio-btn ok">
-                <span class="badge all-ok">All Ok</span>
-              </mat-radio-button>
-
-              <mat-radio-button value="Needs Attention" class="radio-btn attention">
-                <span class="badge needs-attention">Needs Attention</span>
-              </mat-radio-button>
-
-              <mat-radio-button value="Unserviceable" class="radio-btn bad">
-                <span class="badge unserviceable">Unserviceable</span>
-              </mat-radio-button>
-            </mat-radio-group>
-          </div>
-
-          <div *ngIf="q.type === 'Single_line_of_text'">
-            <mat-form-field appearance="outline" class="full-width">
-              <input matInput [formControlName]="q.id" placeholder="Enter text">
-            </mat-form-field>
-          </div>
-
-          <div *ngIf="q.type === 'Date_and_Time'">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Select date</mat-label>
-              <input
-                matInput
-                [matDatepicker]="picker"
-                [formControlName]="q.id"
-                placeholder="MM/DD/YYYY"
-              />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-
-        </div>
+        }
       </div>
 
       <div class="mobile-spacer"></div>
@@ -105,16 +132,16 @@
 
     <div class="mobile-actions">
       <button mat-flat-button color="primary" type="submit" class="mobile-submit-btn">
-        Submit Inspection
+        @if (isOnline) {
+          <span>Submit Inspection</span>
+        } @else {
+          <span>Save Locally</span>
+        }
       </button>
     </div>
   </form>
 </div>
 
-
-@if (loading){
-  <app-loading/>
+@if (loading) {
+  <app-loading />
 }
-
-
-
