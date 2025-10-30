@@ -22,7 +22,7 @@ jobs:
       - run: npm run build -- --configuration production --base-href /qhse/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/PROJECT_NAME
+          path: dist/qhse
   deploy:
     needs: build
     runs-on: ubuntu-latest
