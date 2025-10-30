@@ -1,41 +1,174 @@
 <div class="logs-container">
-  <div class="header">
-    <h2 class="title">Logs</h2>
-    <span class="subtitle">Review previously submitted checklists</span>
-  </div>
+  <div class="logs-content">
+    <div class="q-header">
+      <div class="header-content">
+        <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
 
-  <div class="table-wrap">
-    <table [dataSource]="data" class="mat-elevation-z1" mat-table>
-      <ng-container matColumnDef="id">
-        <th *matHeaderCellDef mat-header-cell> ID</th>
-        <td *matCellDef="let row" mat-cell> {{ row.id }}</td>
-      </ng-container>
+        <div class="header-text">
+          <h1 class="q-title">Logs</h1>
+          <p class="q-subtitle">Review previously submitted checklists</p>
+        </div>
 
-      <ng-container matColumnDef="title">
-        <th *matHeaderCellDef mat-header-cell> Title</th>
-        <td *matCellDef="let row" mat-cell> {{ row.title }}</td>
-      </ng-container>
+        <div class="internet-status" [class]="isOnline ? 'online' : 'offline'">
+          <mat-icon class="status-icon">
+            {{ isOnline ? 'wifi' : 'wifi_off' }}
+          </mat-icon>
+          <span class="status-text">
+            {{ isOnline ? 'Online' : 'Offline' }}
+          </span>
+        </div>
+      </div>
+    </div>
 
-      <ng-container matColumnDef="createdAt">
-        <th *matHeaderCellDef mat-header-cell> Date</th>
-        <td *matCellDef="let row" mat-cell> {{ row.createdAt | date: 'medium' }}</td>
-      </ng-container>
+    @if (hasPendingSubmissions()) {
+      <div class="sync-banner">
+        <mat-icon>sync</mat-icon>
+        <span>You have {{ getPendingCount() }} checklist(s) waiting to sync</span>
+        <button mat-button color="primary" (click)="syncAll()" class="sync-btn">
+          Sync All
+        </button>
+      </div>
+    }
 
-      <ng-container matColumnDef="summary">
-        <th *matHeaderCellDef mat-header-cell> Summary</th>
-        <td *matCellDef="let row" mat-cell>{{ yesCount(row) }}</td>
-      </ng-container>
+    <!-- Mobile Card View -->
+    <div class="cards-container">
+      @for (row of data; track row.ID) {
+        <div class="log-card mat-elevation-z1"
+             [class.local-card]="row.isLocal"
+             (click)="open(row)">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-title">{{ row.Title || 'Untitled' }}</h3>
+              <div class="card-meta">
+                <span class="card-id">ID: {{ row.ID }}</span>
+                <span class="sync-status" [class]="row.syncStatus">
+                  @if (row.isLocal) {
+                    <mat-icon>cloud_off</mat-icon>
+                  } @else {
+                    <mat-icon>cloud_done</mat-icon>
+                  }
+                  {{ row.isLocal ? 'Local' : 'Synced' }}
+                </span>
+              </div>
+            </div>
+            <div class="card-actions">
+              @if (row.isLocal) {
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="retrySubmission(row); $event.stopPropagation()"
+                  matTooltip="Retry sync"
+                  [disabled]="!isOnline">
+                  <mat-icon>sync</mat-icon>
+                </button>
+              }
+              <button (click)="open(row); $event.stopPropagation()"
+                      color="primary"
+                      mat-icon-button>
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </div>
 
-      <ng-container matColumnDef="action">
-        <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let row" mat-cell>
-          <button (click)="open(row)" color="primary" mat-button>View</button>
-        </td>
-      </ng-container>
+          <div class="card-content">
+            <div class="card-row">
+              <mat-icon class="card-icon">calendar_today</mat-icon>
+              <span class="card-date">{{ row.DateOfinspection | date: 'mediumDate' }}</span>
+            </div>
+            <div class="card-row">
+              <mat-icon class="card-icon">check_circle</mat-icon>
+              <span class="card-summary">{{ yesCount(row) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
 
-      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-      <tr (click)="open(row)" *matRowDef="let row; columns: displayedColumns;" class="click-row" mat-row></tr>
-    </table>
+    <!-- Desktop Table View -->
+    <div class="table-wrap">
+      <table [dataSource]="data" class="mat-elevation-z1" mat-table>
+        <ng-container matColumnDef="id">
+          <th *matHeaderCellDef mat-header-cell>ID</th>
+          <td *matCellDef="let row" mat-cell>
+            {{ row.ID }}
+            @if (row.isLocal) {
+              <mat-icon class="local-indicator" color="warn">cloud_off</mat-icon>
+            }
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th *matHeaderCellDef mat-header-cell>Title</th>
+          <td *matCellDef="let row" mat-cell>{{ row.Title || 'Untitled' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th *matHeaderCellDef mat-header-cell>Date</th>
+          <td *matCellDef="let row" mat-cell>
+            {{ row.DateOfinspection | date: 'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="summary">
+          <th *matHeaderCellDef mat-header-cell>Summary</th>
+          <td *matCellDef="let row" mat-cell>{{ yesCount(row) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th *matHeaderCellDef mat-header-cell>Status</th>
+          <td *matCellDef="let row" mat-cell>
+            <span class="status-badge" [class]="row.isLocal ? 'local' : 'synced'">
+              <mat-icon>{{ row.isLocal ? 'cloud_off' : 'cloud_done' }}</mat-icon>
+              {{ row.isLocal ? 'Local' : 'Synced' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th *matHeaderCellDef mat-header-cell></th>
+          <td *matCellDef="let row" mat-cell>
+            <div class="action-btn">
+              @if (row.isLocal) {
+                <button
+                  mat-button
+                  color="primary"
+                  (click)="retrySubmission(row); $event.stopPropagation()"
+                  matTooltip="Retry sync"
+                  [disabled]="!isOnline">
+                  <mat-icon>sync</mat-icon>
+                  Sync
+                </button>
+              }
+              <button (click)="open(row)" color="primary" mat-button>View</button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Keep Material structural directives as is -->
+        <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;"
+            class="click-row"
+            [class.local-row]="row.isLocal"
+            (click)="open(row)"
+            mat-row></tr>
+      </table>
+    </div>
+
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span class="loading-text">Loading logs...</span>
+      </div>
+    }
+
+    @if (!loading && data.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">description</mat-icon>
+        <h3>No logs found</h3>
+        <p>Submitted checklists will appear here</p>
+      </div>
+    }
   </div>
 </div>
-

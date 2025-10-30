@@ -1,10 +1,17 @@
-import {Component} from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { NgClass } from '@angular/common';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-loading',
-  imports: [],
+  standalone: true,
+  imports: [
+    MatProgressSpinnerModule
+  ],
   templateUrl: './loading.component.html',
-  styleUrl: './loading.component.scss'
+  styleUrls: ['./loading.component.scss'],
 })
 export class Loading {
+  @Input() backgroundColor = 'rgba(0, 0, 0, 0.4)';
+  @Input() textColor = 'text-light';
 }

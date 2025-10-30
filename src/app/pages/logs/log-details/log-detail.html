@@ -1,43 +1,146 @@
-<div class="detail-container" *ngIf="log as l; else notFound">
-  <div class="topbar">
-    <a routerLink="/logs" class="back-link">
-      <mat-icon>arrow_back</mat-icon>
-      <span>Back to Logs</span>
-    </a>
-  </div>
-
-  <mat-card class="detail-card">
-    <div class="detail-header">
-      <div class="title-wrap">
-        <h2 class="title">{{ l.title }}</h2>
-        <div class="meta">
-          <span class="id">{{ l.id }}</span>
-          <span>•</span>
-          <span>{{ l.createdAt | date: 'medium' }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="qa-list">
-      <div class="qa-item" *ngFor="let a of l.answers">
-        <div class="q">{{ a.question }}</div>
-        <div class="a" [class.yes]="a.answer" [class.no]="!a.answer">
-          <mat-icon aria-hidden="true">{{ a.answer ? 'check_circle' : 'cancel' }}</mat-icon>
-          <span>{{ a.answer ? 'Yes' : 'No' }}</span>
-        </div>
-      </div>
-    </div>
-  </mat-card>
-</div>
-
-<ng-template #notFound>
+@if (log; as l) {
   <div class="detail-container">
-    <a routerLink="/logs" class="back-link">
-      <mat-icon>arrow_back</mat-icon>
-      <span>Back to Logs</span>
-    </a>
-    <p>Log not found.</p>
-  </div>
-  
-</ng-template>
+    <div class="detail-content">
+      <div class="q-header">
+        <div class="header-content">
+          <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
 
+          <div class="header-text">
+            <div class="header-main">
+              <h1 class="q-title">Inspection Details</h1>
+              <div class="sync-status-badge" [class]="getSyncStatusClass()">
+                <mat-icon class="sync-icon">
+                  {{ isLocal ? 'cloud_off' : 'cloud_done' }}
+                </mat-icon>
+                <span class="sync-text">{{ getSyncStatus() }}</span>
+              </div>
+            </div>
+            <p class="q-subtitle">ID: {{ l.ID }} • {{ l.DateOfinspection | date: 'mediumDate' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <mat-card class="summary-card">
+        <div class="summary-header">
+          <h2 class="summary-title">Inspection Summary</h2>
+          <div class="status-badge" [class]="getOverallStatusClass(l.OverallCondition)">
+            {{ l.OverallCondition || 'Not Specified' }}
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <mat-icon class="summary-icon">person</mat-icon>
+            <div class="summary-text">
+              <span class="label">Done By</span>
+              <span class="value">{{ getDoneByName() }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <mat-icon class="summary-icon">schedule</mat-icon>
+            <div class="summary-text">
+              <span class="label">Shift</span>
+              <span class="value">{{ l.Shift || 'Not Specified' }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <mat-icon class="summary-icon">calendar_today</mat-icon>
+            <div class="summary-text">
+              <span class="label">Inspection Date</span>
+              <span class="value">{{ l.DateOfinspection | date: 'medium' }}</span>
+            </div>
+          </div>
+
+        </div>
+      </mat-card>
+
+      <mat-card class="qa-card">
+        <div class="qa-header">
+          <h2 class="qa-title">Checklist Items</h2>
+        </div>
+
+        <div class="qa-list">
+          @for (question of getQuestionsWithAnswers(l); track $index; let i = $index) {
+            <div class="qa-item" [class]="getAnswerClass(question.answer)">
+              <div class="question-section">
+                <span class="question-number">{{ i + 1 }}.</span>
+                <div class="question-text">{{ question.text }}</div>
+              </div>
+              <div class="answer-section">
+                <div class="answer-badge" [class]="getAnswerClass(question.answer)">
+                  <mat-icon class="answer-icon">
+                    {{ question.answer === 'Yes' ? 'check_circle' : question.answer === 'No' ? 'cancel' : 'help_outline' }}
+                  </mat-icon>
+                  <span class="answer-text">{{ question.answer || 'Not Answered' }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card>
+
+      @if (hasAdditionalInfo(l)) {
+        <mat-card class="info-card">
+          <h2 class="info-title">Additional Information</h2>
+          <div class="info-grid">
+            @if (l.Created) {
+              <div class="info-item">
+                <span class="info-label">Created:</span>
+                <span class="info-value">{{ l.Created | date: 'medium' }}</span>
+              </div>
+            }
+            @if (l.Modified) {
+              <div class="info-item">
+                <span class="info-label">Last Modified:</span>
+                <span class="info-value">{{ l.Modified | date: 'medium' }}</span>
+              </div>
+            }
+            @if (isLocal) {
+              <div class="info-item">
+                <span class="info-label">Storage:</span>
+                <span class="info-value local-text">Local Device</span>
+              </div>
+            } @else {
+              <div class="info-item">
+                <span class="info-label">Storage:</span>
+                <span class="info-value synced-text">Cloud (SharePoint)</span>
+              </div>
+            }
+          </div>
+        </mat-card>
+      }
+    </div>
+  </div>
+} @else {
+  @if (!loading) {
+    <div class="detail-container">
+      <div class="q-header">
+        <div class="header-content">
+          <button mat-icon-button type="button" (click)="goBack()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div class="header-text">
+            <h1 class="q-title">Log Not Found</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="not-found-content">
+        <mat-icon class="not-found-icon">search_off</mat-icon>
+        <h2>Inspection log not found</h2>
+        <p>The requested inspection log could not be found.</p>
+        <button mat-flat-button color="primary" (click)="goBack()">
+          Back to Logs
+        </button>
+      </div>
+    </div>
+  }
+}
+
+@if (loading) {
+  <app-loading/>
+}
