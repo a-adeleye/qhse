@@ -6,6 +6,12 @@
   --jetex-orange: #ff6e25;
 }
 
+app-sync-banner{
+  position: sticky;
+  top: -20px;
+  z-index: 1;
+}
+
 
 body {
   background: #f8f9fa;
