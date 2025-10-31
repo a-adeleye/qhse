@@ -11,26 +11,28 @@
           <p class="q-subtitle">Review previously submitted checklists</p>
         </div>
 
-        <div class="internet-status" [class]="isOnline ? 'online' : 'offline'">
-          <mat-icon class="status-icon">
-            {{ isOnline ? 'wifi' : 'wifi_off' }}
-          </mat-icon>
-          <span class="status-text">
-            {{ isOnline ? 'Online' : 'Offline' }}
-          </span>
+        <div class="header-actions">
+          <div class="internet-status" [class]="isOnline ? 'online' : 'offline'">
+            <mat-icon class="status-icon">
+              {{ isOnline ? 'wifi' : 'wifi_off' }}
+            </mat-icon>
+            <span class="status-text">
+              {{ isOnline ? 'Online' : 'Offline' }}
+            </span>
+          </div>
+
+          @if (hasPendingSubmissions()) {
+            <button
+              (click)="syncAll()"
+              class="sync-all-btn"
+              [disabled]="isSyncAllDisabled()">
+              <mat-icon >sync</mat-icon>
+                <span class="sync-text">Sync {{ getPendingCount() }} Pending</span>
+            </button>
+          }
         </div>
       </div>
     </div>
-
-    @if (hasPendingSubmissions()) {
-      <div class="sync-banner">
-        <mat-icon>sync</mat-icon>
-        <span>You have {{ getPendingCount() }} checklist(s) waiting to sync</span>
-        <button mat-button color="primary" (click)="syncAll()" class="sync-btn">
-          Sync All
-        </button>
-      </div>
-    }
 
     <!-- Mobile Card View -->
     <div class="cards-container">
@@ -60,8 +62,8 @@
                   color="primary"
                   (click)="retrySubmission(row); $event.stopPropagation()"
                   matTooltip="Retry sync"
-                  [disabled]="!isOnline">
-                  <mat-icon>sync</mat-icon>
+                  [disabled]="!isOnline || isSyncing(row)">
+                  <mat-icon [class.spinning]="isSyncing(row)">sync</mat-icon>
                 </button>
               }
               <button (click)="open(row); $event.stopPropagation()"
@@ -163,10 +165,10 @@
                     color="primary"
                     (click)="retrySubmission(row); $event.stopPropagation()"
                     matTooltip="Retry sync"
-                    [disabled]="!isOnline"
+                    [disabled]="!isOnline || isSyncing(row)"
                     class="action-button">
-                    <mat-icon>sync</mat-icon>
-                    Sync
+                    <mat-icon [class.spinning]="isSyncing(row)">sync</mat-icon>
+                    {{ isSyncing(row) ? 'Syncing...' : 'Sync' }}
                   </button>
                 }
                 <button (click)="open(row)" color="primary" mat-button class="action-button">View</button>

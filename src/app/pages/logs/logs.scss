@@ -564,3 +564,152 @@ button[disabled] {
   cursor: not-allowed;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sync-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.internet-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.internet-status.online {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.internet-status.offline {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header-content {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-actions {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+.sync-all-btn{
+  background: white;
+  border: 1px solid #ffeaa7;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/// Sync All Button with loader
+.sync-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover:not(:disabled) {
+    background: #fffbf0;
+    border-color: #ffd966;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 218, 119, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(255, 218, 119, 0.2);
+  }
+
+  &.syncing {
+    background: linear-gradient(135deg, #fff8e1 0%, #fffbf0 100%);
+    border-color: #ffd966;
+    pointer-events: none;
+
+    mat-icon {
+      color: #f59e0b;
+    }
+
+    .sync-text {
+      color: #92400e;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Spinning animation for sync icons
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Individual sync button styles in cards and table
+.card-actions .spinning,
+.action-button .spinning {
+  animation: spin 1s linear infinite;
+}
+
+// Update existing sync status styles
+.sync-status.syncing {
+  background: #fff8e1;
+  color: #92400e;
+
+  mat-icon {
+    animation: spin 1s linear infinite;
+  }
+}
+
+.mat-column-id {
+  width: 135px;
+}

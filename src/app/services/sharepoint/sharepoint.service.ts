@@ -31,6 +31,11 @@ export class SharePointService {
     return this.http.post(endpoint, data);
   }
 
+  addDeviceToken(data: Record<string, unknown>): Observable<any> {
+    const endpoint = `${environment.siteUrl}/lists/getbytitle('FCM List')/items`;
+    return this.http.post(endpoint, data);
+  }
+
   updateListItem(
     listName: string,
 

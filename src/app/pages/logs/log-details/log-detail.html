@@ -17,7 +17,7 @@
                 <span class="sync-text">{{ getSyncStatus() }}</span>
               </div>
             </div>
-            <p class="q-subtitle">ID: {{ l.ID }} • {{ l.DateOfinspection | date: 'mediumDate' }}</p>
+            <p class="q-subtitle">{{ l.Title }} • {{ l.DateOfinspection | date: 'mediumDate' }}</p>
           </div>
         </div>
       </div>
@@ -49,13 +49,23 @@
               </div>
             </div>
 
+
             <div class="summary-item">
-              <mat-icon class="summary-icon">calendar_today</mat-icon>
+              <mat-icon class="summary-icon">directions_car</mat-icon>
               <div class="summary-text">
-                <span class="label">Inspection Date</span>
-                <span class="value">{{ l.DateOfinspection | date: 'medium' }}</span>
+                <span class="label">Vehicle Fleet Number</span>
+                <span class="value">{{ l.Vehicle_x0020_Fleet_x0020_Number }}</span>
               </div>
             </div>
+
+            <div class="summary-item">
+              <mat-icon class="summary-icon">speed</mat-icon>
+              <div class="summary-text">
+                <span class="label">Kilometer</span>
+                <span class="value">{{ l.Kilometer_x0020_ }}</span>
+              </div>
+            </div>
+
 
           </div>
         </mat-card>
@@ -110,6 +120,12 @@
                 <div class="info-item">
                   <span class="info-label">Storage:</span>
                   <span class="info-value synced-text">Cloud (SharePoint)</span>
+                </div>
+              }
+              @if (l.Remarks) {
+                <div class="info-item">
+                  <span class="info-label">Remarks:</span>
+                  <span class="info-value">{{ l.Remarks }}</span>
                 </div>
               }
             </div>

@@ -1,5 +1,5 @@
 <div class="start-container">
-  <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap" enctype="multipart/form-data">
     <mat-card class="q-card">
       <div class="q-header">
         <div class="header-content">
@@ -30,10 +30,14 @@
             </div>
           </div>
 
-          <button mat-flat-button [disabled]="form.invalid" color="primary" type="submit" class="submit-btn">
-            @if (isOnline) {
+          <button mat-flat-button [disabled]="form.invalid || isSubmitting" color="primary" type="submit" class="submit-btn">
+            @if (isSubmitting) {
+              <mat-spinner diameter="20" class="submit-spinner"></mat-spinner>
+            }
+            @if (isOnline && !isSubmitting) {
               <span>Submit</span>
-            } @else {
+            }
+            @if (!isOnline && !isSubmitting) {
               <span>Save Locally</span>
             }
           </button>
@@ -46,9 +50,11 @@
             <div class="q-text">
               <span class="question-number">{{ i + 1 }}.</span>
               {{ q.title }}
-              @if (q.required) {
+              @if (isRequired(q.id)) {
                 <span class="required">*</span>
               }
+
+
             </div>
 
             @if (q.type === 'Choice') {
@@ -80,6 +86,19 @@
               </div>
             }
 
+            @if (q.id === 'Vehicle_x0020_Fleet_x0020_Number') {
+              <div class="choice-group fleet-number-group">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Select Fleet Number</mat-label>
+                  <mat-select [formControlName]="q.id">
+                    @for (fleetNumber of fleetNumbers; track fleetNumber) {
+                      <mat-option [value]="fleetNumber">{{ fleetNumber }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            }
+
             @if (q.type === 'Shift') {
               <div class="choice-group">
                 <mat-radio-group [formControlName]="q.id" class="radio-group">
@@ -107,9 +126,17 @@
 
             @if (q.type === 'Single_line_of_text') {
               <mat-form-field appearance="outline" class="full-width">
-                <input matInput [formControlName]="q.id" placeholder="Enter text" />
+                <input matInput [formControlName]="q.id" placeholder="Type" />
               </mat-form-field>
             }
+
+            @if (q.type === 'multi_line_of_text') {
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ q.title }}</mat-label>
+                <textarea matInput [formControlName]="q.id" rows="3" placeholder="Enter {{ q.title }}"></textarea>
+              </mat-form-field>
+            }
+
 
             @if (q.type === 'Date_and_Time') {
               <mat-form-field appearance="outline" class="full-width">
@@ -125,16 +152,74 @@
             }
           </div>
         }
+
+        <!-- Attachment Field -->
+        <div class="q-item">
+          <div class="q-text">
+            <span class="question-number">{{ questions.length + 1 }}.</span>
+            Attach Supporting Documents or Photos
+            <span class="optional">(Optional)</span>
+          </div>
+
+          <div class="attachment-group">
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+              class="file-input"
+              id="attachmentInput"
+            />
+            <label for="attachmentInput" class="file-input-label">
+              <mat-icon class="attach-icon">attach_file</mat-icon>
+              <span>Choose Files</span>
+            </label>
+
+            @if (selectedFiles.length > 0) {
+              <div class="selected-files">
+                <h4>Selected Files :</h4>
+                <div class="file-list">
+                  @for (file of selectedFiles; track file.name; let i = $index) {
+                    <div class="file-item">
+                      <mat-icon class="file-icon">description</mat-icon>
+                      <span class="file-name">{{ file.name }}</span>
+
+                      <div class="file-actions">
+                        <span class="file-size">({{ formatFileSize(file.size) }})</span>
+                        <button
+                          type="button"
+                          mat-icon-button
+                          (click)="removeFile(i)"
+                          class="remove-file-btn"
+                        >
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <div class="file-requirements">
+              <small>Supported formats: Images, PDF, Word, Excel. Max file size: 10MB each.</small>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="mobile-spacer"></div>
     </mat-card>
 
     <div class="mobile-actions">
-      <button mat-flat-button color="primary" type="submit" class="mobile-submit-btn">
-        @if (isOnline) {
+      <button [disabled]="form.invalid || isSubmitting" mat-flat-button color="primary" type="submit" class="mobile-submit-btn">
+        @if (isSubmitting) {
+          <mat-spinner diameter="20" class="submit-spinner"></mat-spinner>
+        }
+        @if (isOnline && !isSubmitting) {
           <span>Submit Inspection</span>
-        } @else {
+        }
+        @if (!isOnline && !isSubmitting) {
           <span>Save Locally</span>
         }
       </button>

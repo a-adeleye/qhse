@@ -54,7 +54,7 @@ export class LogDetailComponent implements OnInit {
     this.loading = true;
 
     if (this.isOnline) {
-      this.sharepointService.getListItemById('Airside - FBO Vehicle Daily Inspection Checklist', +id).subscribe({
+      this.sharepointService.getListItemById('FBO Vehicle Daily Inspection Checklist', +id).subscribe({
         next: (res: any) => {
           this.log = { ...res.d, isLocal: false };
           this.isLocal = false;
