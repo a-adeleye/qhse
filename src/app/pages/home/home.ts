@@ -14,6 +14,7 @@ import {SyncBanner} from '@pages/sync-banner/sync-banner';
     MatIconModule,
     MatCardModule,
     RouterLink,
+    SyncBanner,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss'
@@ -22,7 +23,12 @@ export class Home {
 
 
 
-  showBanner(){
-    return
+  get showBanner(){
+    return this.getLocalSubmissions().length > 0;
+  }
+
+  private getLocalSubmissions(): any[] {
+    const stored = localStorage.getItem('pendingChecklistSubmissions');
+    return stored ? JSON.parse(stored) : [];
   }
 }
