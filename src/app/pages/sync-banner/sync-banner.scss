@@ -21,10 +21,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   transform: translateY(-100%);
-  transition: transform 0.4s ease, display 0.4s ease;
+  transition: transform 0.4s ease;
   box-sizing: border-box; /* Ensure padding doesn't cause overflow */
-
-  /* Prevent horizontal overflow */
   overflow-x: hidden;
 
   /* Hide by default */
@@ -75,6 +73,8 @@
   transition: all 0.2s ease;
   font-size: 14px;
   white-space: nowrap; /* Prevent button text wrapping */
+  text-decoration: none;
+  display: inline-block;
 }
 
 .sync-banner-button:hover:not(:disabled) {
@@ -96,45 +96,42 @@
   cursor: not-allowed;
 }
 
-.syncing-text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Responsive Design */
+/* Responsive Design - Keep single line on mobile */
 @media (max-width: 768px) {
   .sync-banner {
     padding: 10px 15px;
-    flex-direction: column;
-    gap: 10px;
+    /* Remove flex-direction: column to keep single line */
+    flex-direction: row;
+    gap: 12px;
   }
 
   .sync-banner.show {
-    display: flex; /* Ensure it shows as flex on mobile too */
+    display: flex;
   }
 
   .sync-banner-content {
-    width: 100%;
+    width: auto; /* Remove full width constraint */
+    flex: 1;
+    min-width: 0;
   }
 
   .sync-banner-text {
-    white-space: normal; /* Allow text wrapping on mobile */
-    text-overflow: clip;
+    white-space: pre-wrap; /* Keep text on one line */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: calc(100vw - 160px); /* Calculate max width considering other elements */
   }
 
   .sync-banner-actions {
-    width: 100%;
-    justify-content: flex-end;
+    width: auto; /* Remove full width constraint */
+    justify-content: flex-start;
+    flex-shrink: 0;
+  }
+
+  .sync-banner-button {
+    padding: 6px 12px;
+    font-size: 13px;
+    white-space: pre-wrap;
   }
 }
 
@@ -142,14 +139,33 @@
 @media (max-width: 480px) {
   .sync-banner {
     padding: 8px 12px;
+    gap: 8px;
   }
 
   .sync-banner-text {
-    font-size: 13px;
+    font-size: 12px;
+    max-width: calc(100vw - 140px); /* Adjust for smaller screens */
+  }
+
+  .sync-banner-icon {
+    font-size: 20px;
   }
 
   .sync-banner-button {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Very small devices - ensure text truncates properly */
+@media (max-width: 360px) {
+  .sync-banner-text {
+    font-size: 11px;
+    max-width: calc(100vw - 120px);
+  }
+
+  .sync-banner-button {
+    padding: 4px 8px;
+    font-size: 11px;
   }
 }
