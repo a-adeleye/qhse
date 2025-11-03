@@ -1,7 +1,7 @@
 @if (showBanner){
   <app-sync-banner/>
 }
-<div class="home-container">
+<div class="home-container" [class.show-banner]="showBanner">
   <div class="logo-container">
     <img src="images/logo.png" alt="Jetex Logo" class="logo">
   </div>
