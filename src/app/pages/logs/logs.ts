@@ -31,6 +31,7 @@ export class LogsComponent implements OnInit {
   isOnline = true;
   siteUsers: any[] = [];
   private connectivityService = inject(InternetConnectivityService);
+  authService = inject(AuthService);
 
   constructor(
     private logsSvc: LogsService,
@@ -59,7 +60,7 @@ export class LogsComponent implements OnInit {
     if (this.isOnline) {
       try {
         this.siteUsers = await this.sharepointService.getSiteUsers().toPromise();
-        console.log('Loaded site users:', this.siteUsers);
+        // console.log('Loaded site users:', this.siteUsers);
       } catch (error) {
         console.error('Error loading site users:', error);
         this.siteUsers = [];
@@ -136,7 +137,6 @@ export class LogsComponent implements OnInit {
     this.router.navigate(['/logs', row.ID]).then();
   }
 
-  authService = inject(AuthService);
   async retrySubmission(row: any) {
     this.isOnline = await this.connectivityService.checkInternetConnection();
     if (row.isLocal && this.isOnline) {
@@ -327,7 +327,6 @@ export class LogsComponent implements OnInit {
     return !this.isOnline || !this.hasPendingSubmissions();
   }
 
-  // Helper method to check if an item is syncing
   isSyncing(item: any): boolean {
     return item.syncing === true;
   }

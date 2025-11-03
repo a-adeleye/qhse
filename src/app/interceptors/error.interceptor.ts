@@ -4,12 +4,13 @@ import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {AuthService} from '@shared/services/auth/auth.service';
 import {HttpErrorModel} from '@shared/models/http-error.model';
+import {LogsService} from '@shared/services/logs/logs.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   httpErrorModel!: HttpErrorModel;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private logService:LogsService) {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -30,6 +31,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           return throwError(() => error.message);
         case 403:
           this.httpErrorModel = this.getErrorResponse(error);
+          this.logService.openSnackBar("You are not allowed to access this application.", 'error');
+
           break;
         default:
           this.httpErrorModel = this.getErrorResponse(error);
