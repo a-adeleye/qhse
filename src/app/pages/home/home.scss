@@ -19,7 +19,7 @@ body {
 }
 
 .home-container {
-  min-height: calc(100vh - 106px);
+  min-height: calc(100vh - 88px);
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -170,4 +170,19 @@ button:active {
     transition: none;
   }
 }
+
+.version-label {
+  position: fixed;
+  bottom: 12px;
+  right: 20px;
+  font-size: 13px;
+  color: #555;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  pointer-events: none;
+}
+
 
