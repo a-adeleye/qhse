@@ -19,7 +19,7 @@ body {
 }
 
 .home-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 106px);
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -170,3 +170,4 @@ button:active {
     transition: none;
   }
 }
+
