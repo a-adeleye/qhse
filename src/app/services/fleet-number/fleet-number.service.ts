@@ -2,7 +2,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
 import { SharePointService } from '@shared/services/sharepoint/sharepoint.service';
-import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,24 +23,24 @@ export class FleetNumberService {
   }
 
   getFleetNumbers(): Observable<string[]> {
-    if (this.isOnline()) {
-      return this.sharepointService.getListItems('Vehicle Fleet Number').pipe(
-        tap((data: any) => {
-          if (data?.length > 0) {
-            const numbers = data.map((item: any) =>
-              item.FleetNumber || item.VehicleFleetNumber || item.Title || item.Number
-            ).filter((num: any) => num?.toString().trim());
-
-            if (numbers.length > 0) {
-              this.saveToLocalStorage(numbers);
-            }
-          }
-        }),
-        catchError(() => {
-          return of(this.getFromLocalStorage());
-        })
-      );
-    }
+    // if (this.isOnline()) {
+    //   return this.sharepointService.getListItems('Vehicle Fleet Number').pipe(
+    //     tap((data: any) => {
+    //       if (data?.length > 0) {
+    //         const numbers = data.map((item: any) =>
+    //           item.FleetNumber || item.VehicleFleetNumber || item.Title || item.Number
+    //         ).filter((num: any) => num?.toString().trim());
+    //
+    //         if (numbers.length > 0) {
+    //           this.saveToLocalStorage(numbers);
+    //         }
+    //       }
+    //     }),
+    //     catchError(() => {
+    //       return of(this.getFromLocalStorage());
+    //     })
+    //   );
+    // }
 
     // Offline - return from local storage
     return of(this.getFromLocalStorage());
