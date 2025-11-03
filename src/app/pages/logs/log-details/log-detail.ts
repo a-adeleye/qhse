@@ -37,6 +37,7 @@ export class LogDetailComponent implements OnInit {
   }
 
   loadSiteUsers() {
+    if (!this.isOnline) return;
     this.loading = true;
     this.sharepointService.getSiteUsers().subscribe({
       next: (res: any) => {
