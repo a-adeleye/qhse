@@ -20,7 +20,7 @@ import {SyncBanner} from '@pages/sync-banner/sync-banner';
   styleUrl: './home.scss'
 })
 export class Home {
-appVersion = 'v1.2.0'
+appVersion = 'v1.2.1'
 
   get showBanner(){
     return this.getLocalSubmissions().length > 0;
