@@ -4,11 +4,12 @@ import {map, Observable} from 'rxjs';
 import {environment} from '@env';
 import {ResponseModel} from '@shared/models/response.model';
 import {concatMap} from 'rxjs/operators';
+import {AuthService} from '@shared/services/auth/auth.service';
 
 @Injectable({providedIn: 'root'})
 export class SharePointService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   getSiteUsers(): Observable<any> {
@@ -144,5 +145,18 @@ export class SharePointService {
       )
       .pipe(map(res => res.d.GetContextWebInformation.FormDigestValue));
   }
+
+  logout(error: any) {
+    const entries = Object.entries(error);
+    const hasInteractionError = entries.some(([key, value]) =>
+      (key === 'name' && value === 'InteractionRequiredAuthError') ||
+      (key === 'errorCode' && value === 'interaction_required')
+    );
+
+    if (hasInteractionError) {
+      this.authService.logout();
+    }
+  }
+
 
 }

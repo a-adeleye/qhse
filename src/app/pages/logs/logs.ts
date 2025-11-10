@@ -61,9 +61,10 @@ export class LogsComponent implements OnInit {
       try {
         this.siteUsers = await this.sharepointService.getSiteUsers().toPromise();
         // console.log('Loaded site users:', this.siteUsers);
-      } catch (error) {
-        console.error('Error loading site users:', error);
+      } catch (error: any) {
+        console.log('Error loading site users:', error);
         this.siteUsers = [];
+        this.sharepointService.logout(error);
       }
     }
   }
@@ -97,6 +98,7 @@ export class LogsComponent implements OnInit {
         },
         error: (error) => {
           console.log('Error loading from SharePoint, showing local data only:', error);
+          this.sharepointService.logout(error);
           this.loadLocalDataOnly();
         }
       });
@@ -159,6 +161,7 @@ export class LogsComponent implements OnInit {
         }
       } catch (error) {
         console.error('Resubmission failed:', error);
+        this.sharepointService.logout(error);
         // Remove syncing flag on error
         row.syncing = false;
         this.loading = false;
@@ -178,6 +181,7 @@ export class LogsComponent implements OnInit {
           error: (error) => {
             console.error('Error submitting form data:', error);
             reject(error);
+            this.sharepointService.logout(error);
           }
         });
     });
