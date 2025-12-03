@@ -1,33 +1,33 @@
 <div class="menu-container">
-    <div class="header-section">
-        <button mat-icon-button routerLink="/" class="back-btn">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <div class="header-content">
-            <h1>Activity Logs</h1>
-            <p>Select a category to view history</p>
-        </div>
+  <div class="header-section">
+    <button class="back-btn" mat-icon-button routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="header-content">
+      <h1>Activity Logs</h1>
+      <p>Select a category to view history</p>
     </div>
+  </div>
 
-    <div class="grid-container" [@listAnimation]="menuItems.length">
-        @for (item of menuItems; track item.title) {
-        <div class="menu-card" [routerLink]="item.route" tabindex="0">
-            <div class="card-content">
-                <div class="icon-wrapper" [style.background-color]="item.color + '20'" [style.color]="item.color">
-                    <mat-icon>{{ item.icon }}</mat-icon>
-                </div>
-                <div class="text-content">
-                    <h3>{{ item.title }}</h3>
-                    <p>{{ item.description }}</p>
-                </div>
-                <div class="action-icon">
-                    <mat-icon>arrow_forward_ios</mat-icon>
-                </div>
-            </div>
-            <div class="card-bg-decoration"
-                [style.background]="'linear-gradient(135deg, ' + item.color + '10 0%, ' + item.color + '05 100%)'">
-            </div>
+  <div [@listAnimation]="menuItems.length" class="grid-container">
+    @for (item of menuItems; track item.title) {
+      <div [routerLink]="item.route" class="menu-card" tabindex="0">
+        <div class="card-content">
+          <div [style.background-color]="item.color + '20'" [style.color]="item.color" class="icon-wrapper">
+            <mat-icon>{{ item.icon }}</mat-icon>
+          </div>
+          <div class="text-content">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+          </div>
+          <div class="action-icon">
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </div>
         </div>
-        }
-    </div>
+        <div [style.background]="'linear-gradient(135deg, ' + item.color + '10 0%, ' + item.color + '05 100%)'"
+             class="card-bg-decoration">
+        </div>
+      </div>
+    }
+  </div>
 </div>

@@ -1,19 +1,19 @@
 <div class="menu-container">
   <div class="header-section">
-    <button mat-icon-button routerLink="/" class="back-btn">
+    <button class="back-btn" mat-icon-button routerLink="/">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <div class="header-content">
-      <h1>Start New Process</h1>
+      <h1>Start A New Process</h1>
       <p>Select a category to begin</p>
     </div>
   </div>
 
-  <div class="grid-container" [@listAnimation]="menuItems.length">
+  <div [@listAnimation]="menuItems.length" class="grid-container">
     @for (item of menuItems; track item.title) {
-      <div class="menu-card" [routerLink]="item.route" tabindex="0">
+      <div [routerLink]="item.route" class="menu-card" tabindex="0">
         <div class="card-content">
-          <div class="icon-wrapper" [style.background-color]="item.color + '20'" [style.color]="item.color">
+          <div [style.background-color]="item.color + '20'" [style.color]="item.color" class="icon-wrapper">
             <mat-icon>{{ item.icon }}</mat-icon>
           </div>
           <div class="text-content">
@@ -24,7 +24,8 @@
             <mat-icon>arrow_forward_ios</mat-icon>
           </div>
         </div>
-        <div class="card-bg-decoration" [style.background]="'linear-gradient(135deg, ' + item.color + '10 0%, ' + item.color + '05 100%)'"></div>
+        <div [style.background]="'linear-gradient(135deg, ' + item.color + '10 0%, ' + item.color + '05 100%)'"
+             class="card-bg-decoration"></div>
       </div>
     }
   </div>
