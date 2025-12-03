@@ -1,15 +1,15 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {MatTableModule} from '@angular/material/table';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {DatePipe} from '@angular/common';
-import {LogsService} from '@shared/services/logs/logs.service';
-import {SharePointService} from '@shared/services/sharepoint/sharepoint.service';
-import {InternetConnectivityService} from '@shared/services/internet-connectivity/internet-connectivity.service';
-import {AuthService} from '@shared/services/auth/auth.service';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DatePipe } from '@angular/common';
+import { LogsService } from '@shared/services/logs/logs.service';
+import { SharePointService } from '@shared/services/sharepoint/sharepoint.service';
+import { InternetConnectivityService } from '@shared/services/internet-connectivity/internet-connectivity.service';
+import { AuthService } from '@shared/services/auth/auth.service';
 
 @Component({
   selector: 'app-logs',
@@ -25,7 +25,7 @@ import {AuthService} from '@shared/services/auth/auth.service';
   styleUrl: './logs.scss'
 })
 export class LogsComponent implements OnInit {
-  displayedColumns = ['id','title','createdAt','createdBy','overallCondition' ,'action'];
+  displayedColumns = ['id', 'title', 'createdAt', 'createdBy', 'overallCondition', 'action'];
   data: any[] = [];
   loading = true;
   isOnline = true;
@@ -37,7 +37,7 @@ export class LogsComponent implements OnInit {
     private logsSvc: LogsService,
     private router: Router,
     private sharepointService: SharePointService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.setupOnlineStatusListeners();
@@ -123,7 +123,7 @@ export class LogsComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/']).then();
+    this.router.navigate(['/logs']).then();
   }
 
   getUserName(userId: number): string {
@@ -136,7 +136,7 @@ export class LogsComponent implements OnInit {
   }
 
   open(row: any) {
-    this.router.navigate(['/logs', row.ID]).then();
+    this.router.navigate(['/logs/vehicle-inspection', row.ID]).then();
   }
 
   async retrySubmission(row: any) {

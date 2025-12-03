@@ -43,7 +43,7 @@ export class LogDetailComponent implements OnInit {
       next: (res: any) => {
         this.siteUsers = res;
       },
-      error: (error:any) => {
+      error: (error: any) => {
         console.error('Error loading site users:', error);
       }
     });
@@ -101,14 +101,14 @@ export class LogDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/logs']).then();
+    this.router.navigate(['/logs/vehicle-inspection']).then();
   }
 
   getDoneByName(): string {
     const doneById = this.log.DoneById;
     const user = this.siteUsers.find(u => u.Id === doneById);
 
-    if(this.isLocal) return this.log.UserName;
+    if (this.isLocal) return this.log.UserName;
 
     if (user) return user.Title || user.LoginName || `User ${doneById}`;
 

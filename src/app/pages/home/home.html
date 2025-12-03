@@ -1,51 +1,102 @@
 @if (showBanner) {
   <app-sync-banner/>
 }
+
 <div [class.show-banner]="showBanner" class="home-container">
   <div class="logo-container">
-    <img alt="Jetex Logo" class="logo" src="images/logo.png">
+    <img alt="Jetex Logo" class="logo" src="/images/logo.png">
+    <h1 class="welcome-text">JX-HSE</h1>
   </div>
 
-  <div class="menu-grid">
-    <div aria-label="Start" class="menu-card">
-      <div class="menu-header">
-        <div class="menu-avatar">
-          <span class="material-icons">play_arrow</span>
+  <!-- Menu Cards -->
+  <div [@staggerCards]="2" class="menu-grid">
+    <!-- Start Card -->
+    <div aria-label="Start" class="menu-card start-card" routerLink="start" tabindex="0">
+      <div class="card-content">
+        <div class="icon-section">
+          <div class="icon-wrapper">
+            <span class="material-icons">play_circle</span>
+          </div>
+          <div class="icon-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
         </div>
-        <div class="menu-text">
-          <div class="menu-title">Start</div>
-          <div class="menu-subtitle">Begin a new task or initiate a process</div>
+
+        <div class="text-section">
+          <h2 class="card-title">Start Inspection</h2>
+          <p class="card-description">Begin a new daily inspection checklist</p>
         </div>
-      </div>
-      <div class="card-actions">
-        <button routerLink="start">
-          Start
-          <span class="material-icons">arrow_forward</span>
-        </button>
+
+        <div class="action-section">
+          <div class="action-button">
+            <span>Get Started</span>
+            <span class="material-icons arrow">arrow_forward</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div aria-label="Logs" class="menu-card">
-      <div class="menu-header">
-        <div class="menu-avatar">
-          <span class="material-icons">history</span>
+    <!-- Logs Card -->
+    <div aria-label="Logs" class="menu-card logs-card" routerLink="logs" tabindex="0">
+      <div class="card-content">
+        <div class="icon-section">
+          <div class="icon-wrapper">
+            <span class="material-icons">assessment</span>
+          </div>
+          <div class="icon-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
         </div>
-        <div class="menu-text">
-          <div class="menu-title">Logs</div>
-          <div class="menu-subtitle">View activity logs and history</div>
+
+        <div class="text-section">
+          <h2 class="card-title">View Logs</h2>
+          <p class="card-description">Review inspection history and records</p>
         </div>
-      </div>
-      <div class="card-actions">
-        <button routerLink="logs">
-          Open Logs
-          <span class="material-icons">arrow_forward</span>
-        </button>
+
+        <div class="action-section">
+          <div class="action-button">
+            <span>View History</span>
+            <span class="material-icons arrow">arrow_forward</span>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 
-  <p class="version">v1.1</p>
+  <!-- Footer Stats -->
+  <div @fadeInUp class="stats-section">
+    <div class="stat-item">
+      <div class="stat-icon">
+        <span class="material-icons">verified</span>
+      </div>
+      <div class="stat-text">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Compliance</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <span class="material-icons">security</span>
+      </div>
+      <div class="stat-text">
+        <span class="stat-value">Secure</span>
+        <span class="stat-label">Data Storage</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <span class="material-icons">offline_bolt</span>
+      </div>
+      <div class="stat-text">
+        <span class="stat-value">Offline</span>
+        <span class="stat-label">Capability</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="version-label">{{ appVersion }}</div>
