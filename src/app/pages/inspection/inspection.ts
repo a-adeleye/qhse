@@ -600,7 +600,14 @@ export const JX027_TLD_TMX_450 = [
     required: true
   },
 ];
-export const LAVATORY_SERVICE = [];
+export const LAVATORY_SERVICE = [
+  {
+    id: "IstheGSEfreefromForeignObjectDeb",
+    title: "Is the GSE free from Foreign Object Debris (FOD)?",
+    type: "Choice",
+    required: true
+  },
+];
 export const LEKTRO = [];
 export const MCB = [];
 export const PASSENGER_STEP = [];
