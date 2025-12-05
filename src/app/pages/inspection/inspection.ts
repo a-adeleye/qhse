@@ -42,7 +42,7 @@ export class Inspection {
 
 export const AMBU_LIFT = [
   {
-    id: "Freefromanyexternaldamageorlea",
+    id: "Freefromanyexternaldamageorleaks",
     title: "Free from any external damage or leaks",
     type: "Choice",
     required: true
@@ -63,7 +63,7 @@ export const AMBU_LIFT = [
     required: true
   },
   {
-    id: "Mirrorscleanandproperlyadjuste",
+    id: "Mirrorscleanandproperlyadjusted",
     title: "Mirrors clean and properly adjusted",
     type: "Choice",
     required: true
@@ -75,14 +75,14 @@ export const AMBU_LIFT = [
     required: true
   },
   {
-    id: "Fireextinguisheravailableandval",
-    title: "Fire extinguisher available and valid",
+    id: "Fireextinguisheravailableandvali",
+    title: "Windshield and wipers functional",
     type: "Choice",
     required: true
   },
   {id: "Firstaidkitavailable", title: "First aid kit available", type: "Choice", required: true},
   {
-    id: "Interiorplatformlightsoperatio",
+    id: "Interiorplatformlightsoperationa",
     title: "Interior platform lights operational",
     type: "Choice",
     required: true
@@ -95,19 +95,19 @@ export const AMBU_LIFT = [
   },
   {id: "Testemergencystopswitches", title: "Test emergency stop switches", type: "Choice", required: true},
   {
-    id: "Platformdoorsopenandclosesmoot",
+    id: "Platformdoorsopenandclosesmoothl",
     title: "Platform doors open and close smoothly",
     type: "Choice",
     required: true
   },
   {
-    id: "Operateliftplatformupanddownsmo",
+    id: "Operateliftplatformupanddownsmoo",
     title: "Operate lift platform up and down smoothly",
     type: "Choice",
     required: true
   },
   {
-    id: "Servicebrakeandparkingbrakewor",
+    id: "Servicebrakeandparkingbrakeworki",
     title: "Service brake and parking brake working",
     type: "Choice",
     required: true
@@ -119,7 +119,7 @@ export const AMBU_LIFT = [
     required: true
   },
   {
-    id: "Checkmainbodyairconditionprovi",
+    id: "Checkmainbodyairconditionprovide",
     title: "Check main body air condition provide sufficient cooling",
     type: "Choice",
     required: true
@@ -195,7 +195,13 @@ export const AIR_CONDITION_UNIT = [
   {id: "UnitisfreefromFOD", title: "Unit is free from FOD", type: "Choice", required: true}
 ];
 export const BAGGAGE_TROLLY = [
-  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true},
+  {
+    id: "FleetNumber",
+    title: "Fleet Number",
+    type: "FleetNumber",
+    required: true,
+    options: ['JX011', 'JX012', 'JX013', 'JX014', 'JX015', 'JX016', 'JX017']
+  },
   {id: "Exteriorconditionissatisfactory", title: "Exterior condition is satisfactory", type: "Choice", required: true},
   {id: "Tiresareingoodcondition", title: "Tires are in good condition", type: "Choice", required: true},
   {
@@ -248,12 +254,38 @@ export const BAGGAGE_TROLLY = [
   },
 ];
 export const FBO_VEHICLE = [
-  {id: "Vehicle_x0020_Fleet_x0020_Number", title: "Vehicle Fleet Number", type: "FleetNumber", required: true},
+  {
+    id: "Vehicle_x0020_Fleet_x0020_Number",
+    title: "Vehicle Fleet Number",
+    type: "FleetNumber",
+    required: true,
+    options: [
+      'Silverado 28920',
+      'MINI Cooper 49722',
+      'MINI Cooper 49723',
+      'G-Class 13975',
+      'Nissan Patrol 78242',
+      'RR 46117',
+      'RR 85294',
+      'RR 59897',
+      'Y 85144',
+      '99472',
+      '38630',
+      'J 58300',
+      '12 / 38630',
+      '15 / 38447',
+      '16 / 74315',
+      'J 52600',
+      'JX 007 Golf Cart (Buggy)',
+      'JX 008 Golf Cart (Buggy)',
+    ]
+  },
   {
     id: "Isthevehiclefreefromvisibledamag",
     title: "Is the vehicle free from visible damage or signs of corrosion?",
     type: "Choice",
-    required: true
+    required: true,
+    options: ['Yes', 'No', 'NA (Landside)']
   },
   {
     id: "IstheJetexbrandingplateavailable",
@@ -314,7 +346,8 @@ export const FBO_VEHICLE = [
     id: "Isthecamerainworkingcondition_x0",
     title: "Is the camera in working condition?",
     type: "Choice",
-    required: true
+    required: true,
+    options: ['Yes', 'No', 'NA']
   },
   {
     id: "Arethesafetybeaconlightandhornin",
@@ -332,14 +365,15 @@ export const FBO_VEHICLE = [
     id: "Are_x0020_the_x0020_first_x0020_",
     title: "Are the first aid kit/torch light available for use?",
     type: "Choice",
-    required: true
+    required: true,
+    options: ['Yes', 'No', 'NA']
   },
   {
     id: "IstheAnkerbatterypercentagesuffi",
     title: "Is the Anker battery percentage sufficient?",
     type: "Choice",
     required: true,
-    options: ['Yes', 'No', 'Not Applicable for this Vehicle']
+    options: ['Yes', 'No', 'NA']
   },
   {
     id: "Vehicle_x0020_tools_x0020_kit_x0",
@@ -350,7 +384,13 @@ export const FBO_VEHICLE = [
   },
 ];
 export const GPU = [
-  {id: "Vehicle_x0020_Fleet_x0020_Number", title: "Vehicle Fleet Number", type: "FleetNumber", required: true},
+  {
+    id: "Fleet_x0020_Number",
+    title: "Vehicle Fleet Number",
+    type: "FleetNumber",
+    required: true,
+    options: ['JX001', 'JX020']
+  },
   {
     id: "Arethereanyvisiblesignsofdamage_",
     title: "Are there any visible signs of damage, such as scratches, dents, or cracks?",
@@ -601,15 +641,505 @@ export const JX027_TLD_TMX_450 = [
   },
 ];
 export const LAVATORY_SERVICE = [
+  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true, options: ['JX006', 'JX026']},
   {
-    id: "IstheGSEfreefromForeignObjectDeb",
-    title: "Is the GSE free from Foreign Object Debris (FOD)?",
+    id: "LavTruckCleanlinessissatisfactor",
+    title: "Lav Truck Cleanliness is satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Chocksareavailableandserviceable",
+    title: " Chocks are available and serviceable",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "FireExtinguisheravailableandvali",
+    title: "Fire Extinguisher available and valid ",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "BeaconLightisworking",
+    title: "Beacon Light is working",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "HornBuzzerareworking",
+    title: "Horn & Buzzer are working",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Chassiscomponentsissatisfactory",
+    title: "Chassis components is satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Oilissufficientforoperation",
+    title: "Oil is sufficient for operation",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Tirespressurearesufficientforuse",
+    title: "Tires pressure are sufficient for use",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "TanksFittingsHosesisingoodcondit",
+    title: "Tanks Fittings & Hoses is in good condition",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Tanksvalvecaparesatisfactory",
+    title: "Tanks valve & cap are satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Tankswasteisempty",
+    title: "Tanks waste is empty",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "EngineFunctioningsatisfactory",
+    title: "Engine Functioning satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Breaksareworkingproperly",
+    title: "Breaks are working properly",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Mirrorwindscreensisgoodcondition",
+    title: "Mirror & wind screens is good condition",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "PumpFunctioningsatisfactory",
+    title: "Pump Functioning satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Towhandleoperationsatisfactory",
+    title: "Tow handle operation satisfactory",
+    type: "Choice",
+    required: true,
+    options: ['Yes', 'No', 'NA']
+  },
+  {
+    id: "Towhandlebrakeisworking",
+    title: "Tow handle brake is working",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Batterylevelissufficientforopera",
+    title: "Battery level is sufficient for operation",
+    type: "Choice",
+    required: true,
+    options: ['Yes', 'No', 'NA']
+  }
+];
+export const LEKTRO = [
+  {
+    id: "Fleet_x0020_Number",
+    title: "Fleet Number",
+    type: "FleetNumber",
+    required: true,
+    options: ['JX018', 'JX019', 'JX031']
+  },
+  {
+    id: "Isthesafetycatchhookingoodcondit",
+    title: "Is the safety catch hook in good condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethe_x201c_D_x201d_ringandhook",
+    title: "Are the “D” ring and hook attachment stitching in good condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Istheattachmenthitchusedtosecure",
+    title: "Is the attachment hitch used to secure different tow adapters in good condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthestrutstrapsprotectivesleeve",
+    title: "Is the strut strap's protective sleeve in good condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Aretherubberanti_x002d_slippadso",
+    title: "Are the rubber anti-slip pads on the foot brake and accelerator pedals intact and free from excessive wear?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "IstheLektrofreefromanylooseormis",
+    title: "Is the Lektro free from any loose or missing components?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethebatterychargerconnectorsan",
+    title: "Are the battery charger connectors and cables available and in good condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "IstheGSEfreefromanyfluidleaks_x0",
+    title: "Is the GSE free from any fluid leaks?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Istheemergencybuttondisengagedan",
+    title: "Is the emergency button disengaged and in its normal position?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethecleanlinessandappearancesa",
+    title: "Are the cleanliness and appearance satisfactory?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethetirespressuresadequateforo",
+    title: "Are the tires' pressures adequate for operation?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethetiresfreefromunevenwear_x0",
+    title: "Are the tires free from uneven wear, cuts, or damage?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Istheinstrumentpanelfreefromanyw",
+    title: "Is the instrument panel free from any warning’s indicators?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethepowerdisconnectingbuttons_",
+    title: "Are the power disconnecting buttons (2) operating correctly?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthewinchcut_x002d_offserviceab",
+    title: "Is the winch cut-off serviceable?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthecradleinproperworkingcondit",
+    title: "Is the cradle in proper working condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethelights_x002c_safetybeacon_",
+    title: "Are the lights, safety beacon, horn, and reverse buzzer in serviceable condition?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethefootbrakeandparkingbrakewo",
+    title: "Are the foot brake and parking brake working?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthefireextinguisheravailablean",
+    title: "Is the fire extinguisher available and serviceable for use?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "IstheGSEfreefromforeignobjectdeb",
+    title: "Is the GSE free from foreign object debris (FOD)?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "IsAVPavailableandvalid_x003f_",
+    title: "Is AVP available and valid?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Bypass_x0020_Pin_x0020_Available",
+    title: "Bypass Pin Available",
+    type: "Choice",
+    required: true,
+    options: ['Yes', 'No', 'NA']
+  }
+];
+export const MCB = [
+  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true, options: ['JX002', 'JX022']},
+  {id: "MCBcleanlinessissatisfactory", title: "MCB cleanliness is satisfactory ", type: "Choice", required: true},
+  {
+    id: "Tirespressureissufficientforoper",
+    title: "Tires pressure is sufficient for operation",
+    type: "Choice",
+    required: true
+  },
+  {id: "Beaconlightisworking", title: "Beacon light is working", type: "Choice", required: true},
+  {id: "Hazardlightisworking", title: "Hazard light is working", type: "Choice", required: true},
+  {id: "HornBuzzerareworking", title: "Horn & Buzzer are working", type: "Choice", required: true},
+  {
+    id: "Fireextinguisheravailableandserv",
+    title: "Fire extinguisher available and serviceable ",
+    type: "Choice",
+    required: true
+  },
+  {id: "Equipmentisfreeformleakage", title: "Equipment is free form leakage", type: "Choice", required: true},
+  {id: "Indicatorslightsareworking", title: "Indicators & lights are working ", type: "Choice", required: true},
+  {
+    id: "Boomprotectionsissatisfactoryfor",
+    title: "Boom protections is satisfactory for operation",
+    type: "Choice",
+    required: true
+  },
+  {id: "Electricalpartsaresatisfactory", title: "Electrical parts are satisfactoryr", type: "Choice", required: true},
+  {id: "Emergencystopisworking", title: "Emergency stop is working", type: "Choice", required: true},
+  {id: "AVP_x0020_is_x0020_available_x00", title: "AVP is available and valid", type: "Choice", required: true},
+  {id: "Fuel_x0020_is_x0020_sufficient_x", title: "Fuel is sufficient for operation", type: "Choice", required: true},
+  {
+    id: "Tires_x0020_Pressure_x0020_are_x",
+    title: "Tires Pressure are good for operation",
+    type: "Choice",
+    required: true
+  },
+  {id: "Tires_x0020_is_x0020_free_x0020_", title: "Tires is free from Cut and damage", type: "Choice", required: true},
+  {id: "Boom_x0020_lift_x0020_working_x0", title: "Boom lift working", type: "Choice", required: false},
+  {
+    id: "Panel_x0020_is_x0020_free_x0020_",
+    title: "Panel is free from any waring indicator",
+    type: "Choice",
+    required: false
+  },
+  {
+    id: "Stabilizers_x0020_are_x0020_work",
+    title: "Stabilizers are working sand safe for operation",
+    type: "Choice",
+    required: false
+  }
+];
+export const PASSENGER_STEP = [
+  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true, options: ['JX023', 'JX024', 'JX028']},
+  {id: "Passengerstep_x002d_Cleanliness", title: "Passenger step -Cleanliness", type: "Choice", required: true},
+  {id: "BeaconlightWorking", title: "Beacon light Working", type: "Choice", required: true},
+  {id: "Hazardlightsworking", title: "Hazard lights working", type: "Choice", required: true},
+  {
+    id: "Fireextinguisheravailableandserv",
+    title: "Fire extinguisher available and serviceable",
+    type: "Choice",
+    required: true
+  },
+  {id: "Hornworking", title: "Horn working", type: "Choice", required: true},
+  {id: "Buzzerworking", title: "Buzzer working", type: "Choice", required: true},
+  {id: "Warningsignalsworking", title: "Warning signals working", type: "Choice", required: true},
+  {id: "Paintconditionissatisfactory", title: "Paint condition is satisfactory", type: "Choice", required: true},
+  {
+    id: "Equipment_x002d_Labelsinstructio",
+    title: "Equipment - Labels & instructions available",
+    type: "Choice",
+    required: true
+  },
+  {id: "Equipmentisfreefromleakage", title: "Equipment is free from leakage", type: "Choice", required: true},
+  {
+    id: "GSEfreefromDamage_x0028_chasisfr",
+    title: "GSE free from Damage (chasis & frame)",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Equipment_x002d_Fluidlevelsissuf",
+    title: "Equipment - Fluid levels is sufficient",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Safetybeltschainingoodcondition",
+    title: "Safety belts& chain in good condition",
+    type: "Choice",
+    required: true
+  },
+  {id: "TiresarefreefromWearanddamage", title: "Tires are free from Wear and damage", type: "Choice", required: true},
+  {id: "Equipmentengineisfunctional", title: "Equipment engine is functional", type: "Choice", required: true},
+  {
+    id: "Lights_x002d_Check_x0028_frontan",
+    title: "Lights - Check (front and rear) is working",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "MirrorsWindscreenisingoodconditi",
+    title: "Mirrors & Windscreen is in good condition",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Platform_x002d_Check_x0028_Noski",
+    title: "Platform - Check (No skid coating/covering)",
     type: "Choice",
     required: true
   },
 ];
-export const LEKTRO = [];
-export const MCB = [];
-export const PASSENGER_STEP = [];
-export const TOYOTA_TRACTOR = [];
-export const WATER_SERVICE = [];
+export const TOYOTA_TRACTOR = [
+  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true, options: ['JX009', 'JX010']},
+  {
+    id: "Isthevehiclefreefromvisibledamag",
+    title: "Is the vehicle free from visible damage (scratches, dents, cracks)?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethemirrorscleanandproperlyadj",
+    title: "Are the mirrors clean and properly adjusted?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthevehiclefreefromanyoilorfuel",
+    title: "Is the vehicle free from any oil or fuel leaks?",
+    type: "Choice",
+    required: true
+  },
+  {id: "Arethetowinghookboltssecured_x00", title: "Are the towing hook bolts secured?", type: "Choice", required: true},
+  {
+    id: "Isthetirepressureadequateforuse_",
+    title: "Is the tire pressure adequate for use?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthereanyunevenwear_x002c_cuts_",
+    title: "Is there any uneven wear, cuts, or damage to the tires?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethereanywarninglightsorindica",
+    title: "Are there any warning lights or indicators illuminated on the instrument panel?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethesafetybeltsfunctioningprop",
+    title: "Are the safety belts functioning properly and free from damage?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthesteeringwheelfunctioningpro",
+    title: "Is the steering wheel functioning properly?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Arethelights_x002c_safetybeacon_",
+    title: "Are the lights, safety beacon, horn, and reverse buzzer all serviceable and functioning properly?",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "Isthefireextinguisheravailablean",
+    title: "Is the fire extinguisher available and serviceable for use?",
+    type: "Choice",
+    required: true
+  },
+  {id: "IstheAVPavailableandvalid_x003f_", title: "Is the AVP available and valid?", type: "Choice", required: true},
+  {
+    id: "IsthevehiclefreefromFOD_x0028_Fo",
+    title: "Is the vehicle free from FOD (Foreign Object Debris)?",
+    type: "Choice",
+    required: true
+  },
+];
+export const WATER_SERVICE = [
+  {id: "FleetNumber", title: "Fleet Number", type: "FleetNumber", required: true, options: ['JX005', 'JX025']},
+  {
+    id: "WaterTruckCleanlinessissatisfact",
+    title: "Water Truck Cleanliness is satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {id: "WaterTruckChocksareavailable", title: "Water Truck Chocks are available", type: "Choice", required: true},
+  {
+    id: "FireExtinguisheravailableandvali",
+    title: "Fire Extinguisher available and valid",
+    type: "Choice",
+    required: true
+  },
+  {id: "BeaconLightisworking", title: "Beacon Light is working", type: "Choice", required: true},
+  {id: "BasketOperationissatisfactory", title: "Basket Operation is satisfactory", type: "Choice", required: true},
+  {id: "HornandBuzzerareworking", title: "Horn and Buzzer are working", type: "Choice", required: true},
+  {id: "Chassis_x002d_Componentsisgood", title: "Chassis - Components is good", type: "Choice", required: true},
+  {
+    id: "Tanks_x002d_Waterlevelissatisfac",
+    title: "Tanks - Water level is satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "TanksFittingsHosesisingoodcondit",
+    title: "Tanks Fittings & Hoses is in good condition",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "ChlorineValue_x0028_inPPM_x0029_",
+    title: "Chlorine Value (in PPM) is satisfactory",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "MirrorWindscreenisingoodconditio",
+    title: "Mirror & Windscreen is in good condition",
+    type: "Choice",
+    required: true
+  },
+  {id: "Oilissufficientforoperation", title: "Oil is sufficient for operation", type: "Choice", required: true},
+  {
+    id: "Tirespressureissufficientforoper",
+    title: "Tires pressure is sufficient for operation",
+    type: "Choice",
+    required: true
+  },
+  {
+    id: "WaterCart_x002d_Towhandleoperati",
+    title: "Water Cart - Tow handle operational",
+    type: "Choice",
+    required: true,
+    options: ['Yes', 'No', 'NA']
+  },
+  {
+    id: "WaterCart_x002d_Towhandlebrakeis",
+    title: "Water Cart - Tow handle brake is working",
+    type: "Choice",
+    required: true,
+    options: ['Yes', 'No', 'NA']
+  },
+];

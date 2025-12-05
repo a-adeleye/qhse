@@ -125,3 +125,7 @@ body {
 .mdc-snackbar__label {
   white-space: pre-wrap;
 }
+
+div.mat-mdc-select-panel {
+  --mat-select-panel-background-color: #fff;
+}

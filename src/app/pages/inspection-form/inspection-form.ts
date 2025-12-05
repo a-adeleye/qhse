@@ -190,6 +190,7 @@ export class InspectionForm implements OnInit, OnDestroy {
     };
 
     const isOnline = await this.connectivityService.checkInternetConnection();
+    console.log(isOnline);
     this.isOnline = isOnline;
 
     if (isOnline) {
@@ -235,34 +236,37 @@ export class InspectionForm implements OnInit, OnDestroy {
     return !!control?.validator && control.validator({} as any)?.['required'];
   }
 
+  resetForm() {
+    this.form.reset();
+    this.form.get('DateofInspection')?.setValue(new Date());
+    this.form.get('DoneById')?.setValue(this.authService.loadFromStorage()?.Id || 'current user');
+    this.form.get('Title')?.setValue(this.generateTitle());
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
   private submitToSharePointWithAttachments(formData: any) {
     try {
       this.sharepointService.addListItem(this.listName, {Title: formData.Title, ...this.form.value})
         .subscribe({
           next: async (res: any) => {
-            console.log('Successfully submitted to SharePoint:', res);
             if (this.selectedFiles.length > 0 && res && res.d.ID) {
               const itemId = res.d.ID;
               await this.uploadAttachments(itemId);
             }
-
             this.isSubmitting = false;
             this.logService.openSnackBar('Checklist added successfully!', 'success');
-            this.goBack();
+            this.resetForm();
           },
           error: (error) => {
-            console.log('Failed to submit to SharePoint, saving locally:', error);
-            this.saveToLocalStorageWithAttachments(formData);
             this.isSubmitting = false;
-            this.logService.openSnackBar('Checklist saved locally. Will sync when online.', 'success');
-            this.goBack();
+            console.log(error)
+            this.logService.openSnackBar(error.message, 'error');
           }
         });
     } catch (error) {
       console.error('Error in submission process:', error);
-      this.saveToLocalStorageWithAttachments(formData);
       this.isSubmitting = false;
-      this.logService.openSnackBar('Checklist saved locally. Will sync when online.', 'success');
+      this.logService.openSnackBar(`${error}`, 'error');
       this.goBack();
     }
   }

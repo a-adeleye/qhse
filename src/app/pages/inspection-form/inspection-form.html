@@ -5,7 +5,7 @@
       <div class="progress-bar">
         <div [style.width.%]="getProgress()" class="progress-fill"></div>
       </div>
-      <p class="q-subtitle">{{ getCompletedCount() }} of {{ questions.length }} completed</p>
+      <p class="q-subtitle">{{ getCompletedCount() }} of {{ questions.length + 4 }} completed</p>
     </div>
     <div [class]="isOnline ? 'online' : 'offline'" class="connectivity-status"
          matTooltip="{{ isOnline ? 'You are online' : 'You are offline - forms will be saved locally' }}"
@@ -112,7 +112,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Select Fleet Number</mat-label>
                   <mat-select [formControlName]="q.id">
-                    @for (fleetNumber of fleetNumbers; track fleetNumber) {
+                    @for (fleetNumber of q.options; track fleetNumber) {
                       <mat-option [value]="fleetNumber">{{ fleetNumber }}</mat-option>
                     }
                   </mat-select>
