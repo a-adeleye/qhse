@@ -199,7 +199,7 @@ export class InspectionForm implements OnInit, OnDestroy {
       this.saveToLocalStorageWithAttachments(formData);
       this.isSubmitting = false;
       this.logService.openSnackBar('Checklist saved locally. Will sync when online.', 'success');
-      this.goBack();
+      this.resetForm();
     }
   }
 
@@ -267,7 +267,6 @@ export class InspectionForm implements OnInit, OnDestroy {
       console.error('Error in submission process:', error);
       this.isSubmitting = false;
       this.logService.openSnackBar(`${error}`, 'error');
-      this.goBack();
     }
   }
 
@@ -294,7 +293,8 @@ export class InspectionForm implements OnInit, OnDestroy {
       Promise.all(readFilePromises).then(() => {
         const submissionData = {
           ...formData,
-          attachments: filesToStore
+          attachments: filesToStore,
+          listName: this.listName
         };
 
         const pendingSubmissions = this.getPendingSubmissions();

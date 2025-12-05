@@ -1,0 +1,208 @@
+<div class="q-header">
+  <div class="header-content">
+    <button (click)="goBack()" class="back-btn" mat-icon-button type="button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="header-text">
+      <h1 class="q-title">Logs</h1>
+      <p class="q-subtitle">Review previously submitted checklists</p>
+    </div>
+  </div>
+</div>
+<div class="spacer"></div>
+<div class="secondary-header">
+  <div class="header-actions">
+    <div [class]="isOnline ? 'online' : 'offline'" class="internet-status">
+      <mat-icon class="status-icon">
+        {{ isOnline ? 'wifi' : 'wifi_off' }}
+      </mat-icon>
+      <span class="status-text">
+              {{ isOnline ? 'Online' : 'Offline' }}
+            </span>
+    </div>
+
+    @if (hasPendingSubmissions()) {
+      <button
+        (click)="syncAll()"
+        [disabled]="isSyncAllDisabled()"
+        class="sync-all-btn">
+        <mat-icon>sync</mat-icon>
+        <span class="sync-text">Sync {{ getPendingCount() }} Pending</span>
+      </button>
+    }
+  </div>
+</div>
+
+<div class="logs-container">
+  <div class="logs-content">
+
+    <div class="cards-container">
+      @for (row of data; track row.ID) {
+        <div (click)="open(row)"
+             [class.local-card]="row.isLocal"
+             class="log-card mat-elevation-z1">
+          <div class="card-header">
+            <div class="card-title-group">
+              <h3 class="card-title">{{ row.Title || 'Untitled' }}</h3>
+              <div class="card-meta">
+                <span class="card-id">ID: {{ row.ID }}</span>
+                <span [class]="row.syncStatus" class="sync-status">
+                  @if (row.isLocal) {
+                    <mat-icon>cloud_off</mat-icon>
+                  } @else {
+                    <mat-icon>cloud_done</mat-icon>
+                  }
+                  {{ row.isLocal ? 'Local' : 'Synced' }}
+                </span>
+              </div>
+            </div>
+            <div class="card-actions">
+              @if (row.isLocal) {
+                <button
+                  (click)="retrySubmission(row); $event.stopPropagation()"
+                  [disabled]="!isOnline || isSyncing(row)"
+                  color="primary"
+                  mat-icon-button
+                  matTooltip="Retry sync">
+                  <mat-icon [class.spinning]="isSyncing(row)">sync</mat-icon>
+                </button>
+              }
+              <button (click)="open(row); $event.stopPropagation()"
+                      color="primary"
+                      mat-icon-button>
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <div class="card-row">
+              <mat-icon class="card-icon">person</mat-icon>
+              <span class="card-text">{{ row.createdByName || 'Unknown User' }}</span>
+            </div>
+            <div class="card-row">
+              <mat-icon class="card-icon">assessment</mat-icon>
+              <span [class]="getOverallStatusClass(row.OverallCondition)"
+                    class="status-badge">{{ row.OverallCondition || 'N/A' }}</span>
+            </div>
+            <div class="card-row">
+              <mat-icon class="card-icon">calendar_today</mat-icon>
+              <span class="card-text">{{ row.DateofInspection | date: 'mediumDate' }}</span>
+            </div>
+            <div class="card-row">
+              <mat-icon class="card-icon">check_circle</mat-icon>
+              <span class="card-text">{{ yesCount(row) }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Desktop Table View -->
+    <div class="table-container">
+      <div class="table-wrap">
+        <table [dataSource]="data" class="mat-elevation-z1" mat-table>
+          <ng-container matColumnDef="id" style="width: 80px;">
+            <th *matHeaderCellDef mat-header-cell>ID</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <span class="id-text">{{ row.ID }}</span>
+              @if (row.isLocal) {
+                <mat-icon class="local-indicator" color="warn">cloud_off</mat-icon>
+              }
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title" style="width: 200px;">
+            <th *matHeaderCellDef mat-header-cell>Title</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <span [title]="row.Title || 'Untitled'" class="title-text">{{ row.Title || 'Untitled' }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdBy" style="width: 150px;">
+            <th *matHeaderCellDef mat-header-cell>Created By</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <span class="text-ellipsis">{{ row.createdByName || 'Unknown User' }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="overallCondition" style="width: 140px;">
+            <th *matHeaderCellDef mat-header-cell>Overall Condition</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <span [class]="getOverallStatusClass(row.OverallCondition)"
+                    class="status-badge">{{ row.OverallCondition || 'N/A' }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt" style="width: 120px;">
+            <th *matHeaderCellDef mat-header-cell>Inspection Date</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              {{ row.DateofInspection | date: 'dd/MM/yyyy' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="summary" style="width: 100px;">
+            <th *matHeaderCellDef mat-header-cell>Summary</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              {{ yesCount(row) }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status" style="width: 100px;">
+            <th *matHeaderCellDef mat-header-cell>Status</th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <span [class]="row.isLocal ? 'local' : 'synced'" class="status-badge">
+                <mat-icon>{{ row.isLocal ? 'cloud_off' : 'cloud_done' }}</mat-icon>
+                {{ row.isLocal ? 'Local' : 'Synced' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" style="width: 120px;">
+            <th *matHeaderCellDef mat-header-cell></th>
+            <td *matCellDef="let row" class="cell-content" mat-cell>
+              <div class="action-btn">
+                @if (row.isLocal) {
+                  <button
+                    (click)="retrySubmission(row); $event.stopPropagation()"
+                    [disabled]="!isOnline || isSyncing(row)"
+                    class="action-button"
+                    color="primary"
+                    mat-button
+                    matTooltip="Retry sync">
+                    <mat-icon [class.spinning]="isSyncing(row)">sync</mat-icon>
+                    {{ isSyncing(row) ? 'Syncing...' : 'Sync' }}
+                  </button>
+                }
+                <button (click)="open(row)" class="action-button" color="primary" mat-button>View</button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="displayedColumns; sticky: true;" mat-header-row></tr>
+          <tr (click)="open(row)"
+              *matRowDef="let row; columns: displayedColumns;"
+              [class.local-row]="row.isLocal"
+              class="click-row"
+              mat-row></tr>
+        </table>
+      </div>
+    </div>
+
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span class="loading-text">Loading logs...</span>
+      </div>
+    }
+
+    @if (!loading && data.length === 0) {
+      <div class="empty-state">
+        <mat-icon class="empty-icon">description</mat-icon>
+        <h3>No logs found</h3>
+        <p>Submitted checklists will appear here</p>
+      </div>
+    }
+  </div>
+</div>

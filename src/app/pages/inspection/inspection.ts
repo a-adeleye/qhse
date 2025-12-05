@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {ActivatedRoute} from '@angular/router';
-import {InspectionForm} from '@pages/inspection-form/inspection-form';
+import {InspectionForm} from '@pages/inspection/inspection-form/inspection-form';
 
 @Component({
   selector: 'app-inspection',
@@ -31,7 +31,7 @@ export class Inspection {
   };
 
   constructor() {
-    this.listName = this.route.snapshot.paramMap.get('id') ?? '';
+    this.listName = this.route.snapshot.paramMap.get('list') ?? '';
   }
 
   get questions() {
